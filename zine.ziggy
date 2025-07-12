@@ -1,0 +1,9 @@
+Site {
+    .title = "Why is is mandatory",
+    .host_url = "https://guidetozigforpeoplewhousedtoknowzigandthenhadtheirmemorywiped.com",
+    .content_dir_path = "content",
+    .layouts_dir_path = "layouts",
+    .assets_dir_path = "assets",
+    .static_assets = [
+    ],
+}

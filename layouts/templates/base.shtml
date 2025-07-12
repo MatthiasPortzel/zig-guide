@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head id="head">
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1">
+    <title>Matthias's Guide to Zig for People Who Used To Know Zig and Then Had Their Memory Wiped</title>
+    <link type="text/css" rel="stylesheet" href="$site.asset('style.css').link()">
+    <link type="text/css" rel="stylesheet" href="$site.asset('highlight.css').link()">
+    <super>
+  </head>
+  <body id="body">
+    <nav>
+      <a href="$site.page('').link()">Home</a>
+    </nav>
+    <super>
+  </body>
+</html>
