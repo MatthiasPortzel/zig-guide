@@ -1,0 +1,55 @@
+html {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+:root {
+    --styled-border: 4px double hsl(0, 0%, 42%);
+}
+
+body {
+    flex-grow: 1;
+    max-width: 40em;
+    border: var(--styled-border);
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    border-bottom: var(--styled-border);
+
+    a {
+        text-decoration: none;
+    }
+}
+
+nav > * {
+    flex-grow: 1;
+}
+
+.content {
+    padding: 20px;
+}
+
+.content a:not([target])::after {
+    display: inline-block;
+    content: '';
+    mask-size: contain;
+    background-color: currentColor;
+    mask: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWNoZXZyb25zLXJpZ2h0LWljb24gbHVjaWRlLWNoZXZyb25zLXJpZ2h0Ij48cGF0aCBkPSJtNiAxNyA1LTUtNS01Ii8+PHBhdGggZD0ibTEzIDE3IDUtNS01LTUiLz48L3N2Zz4=) no-repeat 50% 50%;
+    margin: -0.3em -0.2em -0.25em 0.05em;
+    width: 1.1em;
+    height: 1.1em;
+    transition: margin-left 60ms;
+}
+
+.content a:not([target]):hover::after {
+    margin-left: 4px;
+}
+
+.content code {
+    /* Prevents inline-code blocks from breaking across lines */
+    display: inline-block;
+}

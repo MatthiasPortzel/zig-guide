@@ -4,13 +4,22 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1">
     <title>Matthias's Guide to Zig for People Who Used To Know Zig and Then Had Their Memory Wiped</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap-reboot.min.css" integrity="sha256-LR3cTZvDtka+FVVZFNhKksjFFc9s5eeQJtL7d+kM8Cg=" crossorigin="anonymous">
     <link type="text/css" rel="stylesheet" href="$site.asset('style.css').link()">
     <link type="text/css" rel="stylesheet" href="$site.asset('highlight.css').link()">
     <super>
   </head>
   <body id="body">
     <nav>
-      <a href="$site.page('').link()">Home</a>
+      <a href="$site.page('').link()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house-icon lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        Home
+      </a>
+      <a href="$site.page('chapters').link()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-up-from-line-icon lucide-arrow-up-from-line"><path d="m18 9-6-6-6 6"/><path d="M12 3v14"/><path d="M5 21h14"/></svg>
+        Table of Contents
+      </a>
+      <span><!--spacer--></span>
     </nav>
     <super>
   </body>
