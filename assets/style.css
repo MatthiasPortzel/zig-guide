@@ -2,6 +2,7 @@ html {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    background: rgb(81, 67, 122);
 }
 
 :root {
@@ -12,6 +13,7 @@ body {
     flex-grow: 1;
     max-width: 40em;
     border: var(--styled-border);
+    min-height: 100vh;
 }
 
 nav {
