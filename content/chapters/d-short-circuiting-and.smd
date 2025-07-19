@@ -85,15 +85,30 @@ fn main () void {
 ```
 This code example program will only once, since the second call to `returnsFalse` will be skipped.
 
-For reference, `||` is used in Zig—it's used for combining error sets. Error sets are slightly beyond the scope of this guide. But if you use `||` instead of `or` and get an error about `||` needing comptime known arguments, it’s because it’s expecting an error set.
+For reference, `||` is used in Zig—it's used for combining error sets. Error sets are slightly beyond the scope of this guide. But if you use `||` instead of `or` and get an error about `||` needing comptime known arguments, it's because it's expecting an error set.
 
+## Enums
+Unlike numbers and booleans, which we've already talked about, enums are special because you can create your own types of enums. An Enum is a type which represents one of a set of possible values.
 
+**YOU**: But isn't that true of all types?
 
+Yes, sure. The first aspect of a type is that it defines a set of possible values. The difference with enums is that there are very few things that you can do with them. The primary operation that you can do with an enum is equality—checking if it is the same as another enum value.
 
+Enums are normally used when you have a discrete and small known set of possible values, and you want to make sure that a variable is one of the values in the set. For example, my stoplight (you don't have a stoplight in your living room?) has three possible colors: red, yellow, and green. We can express these three states with an enum.
 
+```zig
+const StoplightColors = enum {
+    red, yellow, green
+};
 
+pub fn main () void {
+    const currentColor: StoplightColors = .red;
+    @import("std").debug.assert(currentColor != .green);
+}
+```
 
+In this example, we first create an enum, and list out all of our possible states. If you don't know all of your possible states, or there are too many to list, then an enum isn't a great choice. We then create a variable called `currentColor`, with type `StoplightColors`. Notice how `StoplightColors` is capitalized (PascalCase) because it's a user-created type. As mentioned, enums are kind of a one-trick pony. We can use `==` for equality or `!=` for inequality. In this example, we use `!=`.
 
+Notice the leading `.` before the enum value. This is called enum-literal syntax. It only works when Zig can determine the type of the enum from context, which it can here because it knows the type of the `currentColor` variable. This leading `.` will continue to show up in Zig in other places. It means a couple different things, but when it's in front of an identifier like this, it means, "look this up in context."
 
-
-Arrays and enums and unions
+## Unions

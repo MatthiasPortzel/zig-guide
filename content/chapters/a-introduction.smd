@@ -4,5 +4,43 @@
 .author = "",
 .date = @date("1970-01-01T00:00:00")
 ---
-# Welcome to the present
-Blah blah chapter one
+# Chapter A: Welcome to the present
+
+I know how it goes. One of your parents or your childhood best friend or someone close to you dies. You enter into a depressive slump. Pray to God. But you've fallen too far. You can't get by alone.
+
+And so you learn the Zig programming language, and embedded programming, and quantum mechanics and physics and all that stuff that I don't know anymore. And you put together your time machine and go back in time to before it happened.
+
+But you missed something. See, time travel isn't like in the movies. You don't get to go back in time and be the same person that you were when you left. Time doesn't work that way. Your memories, your soul, who you are, it's not stored in the time stream like material stuff. So you're back in time, you've made it back to the year 2025 but your memories are gone. You know what you knew before the accident. But you've forgotten that there even was an accident. You've forgotten zig and quantum mechanics and physics and embedded programming and in fact, you've forgotten that you're a time traveler. You don't know that there's a second version of you.
+
+You just have a sort of curiosity, a certain passion, that you can't really explain. You don't know where it came from (because in this version of the time line there's no impetus for it). You don't remember the loss. You don't remember Zig.
+
+But that's okay. That's why I put together this guide for you. This is Matthias's Guide to Zig for People Who Used To Know Zig and Then Had Their Memory Wiped. It's a ground-up no-prior-knowledge-assumed guide (except of course that it is assumed that you used to have the prior knowledge that you've now lost).
+
+Now first of all, when you started learning Zig six years from now, it was a fully fleshed-out 1.0 language. All the bugs, all the kinks, had been worked out (it still had some bugs, but most of the bugs had been ironed out). It was very ready for production use in time machines. But we're not in 2031 anymore, we're in 2025. And in 2025 Zig is very much a pre-1.0 "beta" programming language. In fact, some would add the caveat that using the Zig programming language at this stage almost certainly means participating in the development of the Zig compiler itself. Maybe not editing code or proposing new features, but being willing to investigate and file bug reports. After all, if you're trying to build a time machine with Zig, no one's tried to do that before, so you may hit issues no one else has encountered. (Of course, this also might explain why you liked Zig so much in 2031 when you learned it the first time—see, if this version of you files bugs now, then those important bugs may be fixed before 1.0.)
+
+Before we jump into Zig I have a couple of warnings to mentally prepare you for the journey ahead.
+
+## Warning: forced participation.
+You are a character in this book. This is unfortunately necessary—your participation is important when learning new things. If you read this book, you give me, the author, the ability to cause your character to do or say certain things without your consent. I will use this ability sparingly out of respect for your boundaries and individuality, but sometimes it may be necessary to advance the plot. Let's do an example, right here, a trust-fall of sorts.
+
+**YOU**: Okay, I'm ready to learn Zig.
+
+See, that wasn't so bad. I could have made you admit that you have a secret fetish for using `var` instead of `let` in JavaScript programs. (Oooh, pre-ES5 JavaScript, how taboo.)
+
+If you want to actually learn Zig, you also need to be prepared to write in it. Programming is very well suited to independent practice. Think of yourself as an aspiring art student. You can't just read books about drawing, and you can't just sit down and start on a big portfolio piece immediately. You need to carry around notebooks and fill them with sketches. You need to wake up, roll out of bed, and write down the Zig code that was filling your dreams.
+
+## Warning: the computer is not your friend.
+
+Computers will serve you, but they are like the malicious genie who gives you exactly what you ask for, even if it's not what you mean. You have to learn to think through what you want before asking, otherwise the computer will throw an error, or worse.
+
+## Warning: exceptional patience required
+
+A designer who was working at a startup became a programmer because they didn't have enough programmers. He didn't have any formal training in it. He said,
+
+> Learning how to program is hard but most people can do it. There are two requirements, really: emotional regulation and patience.
+
+The computer can't hurt you and it has to play by the rules. But it has infinite patience. The only way that the computer "wins" is if you get angry or frustrated and give up.
+
+With those out of the way, I think it's time to continue, don't you?
+
+**YOU**: Let's go.

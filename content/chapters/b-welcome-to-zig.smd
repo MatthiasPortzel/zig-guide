@@ -114,7 +114,7 @@ But I jumped ahead of myself. I assumed that you know how to use a terminal and 
 
 While you can install Zig through your system package manager, many people (including me) install it by downloading pre-built binaries from ziglang.org. If you go this route you have to ensure it's added to your shell PATH (and don't move the zig binary—it has to be able to find the lib/ folder which is also included in a Zig download).
 
-Zig is pre-1.0, meaning that the language will change and break frequently. This guide is written assuming Zig 0.14.1.
+(The examples in this guide is written assuming Zig 0.14.1.)
 
 You can then write your Zig code in a plain text file with the `.zig` file extension, and run it with `zig run dont_listen.zig`. There are really four ways to compile Zig code.
 1. `zig run` which compiles and runs
