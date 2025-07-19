@@ -1,0 +1,99 @@
+---
+.title = "",
+.date = @date("1970-01-01T00:00:00"),
+.author = "",
+.layout = "chapter.shtml"
+---
+
+# Chapter D: An Ode to Short-Circuiting And
+
+## Booleans
+
+Now, it was very brief, but if it's possible you noticed that I called out `u1` in the previous section. `u1` represents, of course, a single bit. It's possible you were concerned that Zig relied on its arbitrary-bit-width integers in place of a fully realized boolean type. However, let your concerns be assuaged. Zig does have a boolean type.
+
+```zig
+const will_i_survive: boolean = false;
+```
+
+**YOU**: I wasn't concerned. In fact, wouldn't it be cool if Zig didn't have a boolean and just used u1?
+
+But the clarity! It's much semantically correct to have a u1 type for storing a single bit, 0 or 1, and a boolean type, for storing a true or false. Remember, type isn't just about internal representation, it's also about usage. A u1 can be added or subtracted or be acted on by bitwise operators, but it can't be used in conditionals. And a boolean can be used in a if statement, but it can't be added or subtracted or coerced to a number.
+
+I want to run through some examples of these rules, to make them clear. All of these usages are okay:
+```zig
+const std_out = std.io.getStdOut().writer();
+const door_unlocked = false;
+if (!door_unlocked) {
+    try std_out.writeAll("I'm trapped!");
+}
+var hp: u1 = 1;
+hp -= 1;
+// Explicit comparison can be used to convert from u1 to boolean
+if (hp == 0) {
+    try std_out.writeAll("I'm dead.");
+}
+// @intFromBool can be used to convert from boolean to int
+const i_need_a_number: u1 = @intFromBool(door_unlocked);
+try std_out.print("{}", .{ i_need_a_number }); // Prints 0
+```
+
+In contrast, all of these things are disallowed (thankfully):
+```zig
+if (1) { // Can't use number in condition
+    try std_out.writeAll("Oh no.");
+}
+var my_truth = true;
+my_truth -= 1; // Can't do math on boolean
+const sanity = 0;
+try std_out.print("{}", .{ !sanity }); // Can't invert a number
+if (true || false) { // || isn't used for boolean or in Zig
+
+}
+```
+
+**YOU**: Did I read that right? `true || false` isn't allowed? What's that about.
+
+Well, that's a different issue. You understand the u1 versus boolean distinction?
+
+**YOU**: Yeah, I guess.
+
+I wouldn't be harping the point except that it's important. The two different data types have the same backing representation in the computer, and so they could be treated the same by the programming language or programmer (like in C). But they're semantically different. This is what I call "semantic programming"—writing code that most closely represents what you mean, not what's simplest or shortest or fastest or most explicit.
+
+**YOU**: Okay so how do you do boolean or?
+
+`or`.
+
+**YOU**: Like Python? Like Lua!?
+
+Yep. In most places Zig uses C-style syntax (like Java and C++ and JavaScript and similar). But there's a good reason why Zig diverges here. In these languages, operators, like +, -, & (bitwise and), << (left shift), etc are special characters. And keywords, like if, for, and while, effect control flow. Since Zig has short-circuiting `and` and `or`, they affect control flow—so they're keywords not operators.
+
+**YOU**: Huh. Could remind me what short-circuiting means?
+
+Sure. `and` only returns true if both sides are true. If the programming language evaluates the left side and it’s `false`, then it will skip evaluating the right side and return false.
+
+```zig
+fn returnsFalse() bool {
+    std.debug.print("there is no hope");
+    return false;
+}
+
+fn main () void {
+    if (returnsFalse() and returnsFalse()) {
+        std.debug.print("this is impossible.");
+    }
+}
+```
+This code example program will only once, since the second call to `returnsFalse` will be skipped.
+
+For reference, `||` is used in Zig—it's used for combining error sets. Error sets are slightly beyond the scope of this guide. But if you use `||` instead of `or` and get an error about `||` needing comptime known arguments, it’s because it’s expecting an error set.
+
+
+
+
+
+
+
+
+
+
+Arrays and enums and unions

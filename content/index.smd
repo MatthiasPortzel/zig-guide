@@ -3,11 +3,14 @@
 .date = @date("1990-01-01T00:00:00"),
 .author = "Sample Author",
 .layout = "index.shtml",
-.draft = false,
 --- 
 
 # Matthias's Guide to Zig for People Who Used To Know Zig and Then Had Their Memory Wiped
 
 In a world of minimal-effort AI-based Zig misinformation, a refreshing piece of high-effort, human-written, Zig misinformation.
+
+[Start Reading](./chapters/a-introduction)
+
+[Table of Contents](./chapters)
 
 *Close enough, welcome back Why the Lucky Stiff*

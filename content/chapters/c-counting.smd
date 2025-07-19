@@ -1,0 +1,175 @@
+---
+.layout = "chapter.shtml",
+.title = "",
+.author = "",
+.date = @date("1970-01-01T00:00:00")
+---
+
+# Chapter C: Counting
+
+## Numeric Types
+
+Like most programming languages, Zig has a concept of types and variables. This is an example of a simple variable declaration.
+
+```zig
+const save_me: usize = 9999;
+```
+
+In this example, the variable is named `save_me` and the type of the variable is `usize`. The value is `9999`. If you haven't thought about types in a programing langue befor...
+
+**YOU**: I have.
+
+Well, if you hadn't, the way that I would introduce them in Zig is to say that the type describes three things:
+1. First, the possible values of the variable. This is the one that most people think of when they think about the type of a variable. Some of the more mathematically inclined even define the type theoretically as a set of possible values.
+2. The second reason that the type of a variable is important is because of how you use it. Using a certain type may allow or restrict your variable's interactions with certain other pieces of code, like functions or operators.
+3. Third, the type influences the representation in memory that is going to be used for it. The same value may be stored differently when the computer is using it depending on its type.
+
+### `usize`
+
+Zig has a couple of types for storing numbers. As discussed previously, numbers are a convenient starting point, not because they're special, but because they are simple, and can in turn represent other data. The most basic is `usize`. The u means "unsigned" and usize is an integer type, so it can only store whole numbers greater than or equal to 0: 0, 1, 2, 3, etc. The maximum value of a `usize` is normally 18446744073709551615.
+
+**YOU**: That's a big number.
+
+Yeah. It's 2^64 - 1.
+
+So that describes what values a `usize` can have. I said that the second part of the type defines what you can do with it. `usize` defines that this variable is a normal numeric type, but more specifics will have to wait—we'll get to some usages of numbers in a second.
+
+The third property of a type is the layout in memory, and this is what makes `usize` special. Unlike other numeric types, the size that `usize` takes, the number of bits, is defined by the computer running the code. Most modern consumer computers (your MacBook or ChromeBook or MicrosoftWindowsBook) are 64-bit, which means that they're good at working with 64 bits of data a time. Their "hands" are perfectly designed to hold 64 bits, so if you ask them to grab 64 bits, they're very happy. (They can work with other amounts of data, it's just a little awkward.) So on these computers, `usize` (the accommodating fellow) is 64 bits, and on these platforms the maximum value is 2^64 - 1. On other platforms, like older 32 bit computers, `usize` is 32 bits and the maximum value is the (much much smaller) 4294967295.
+
+### `isize`
+
+`usize` has an oft-forgotten sibling, `isize`. `isize` is the same size as `usize`—it shares its property of changing size on different platforms, but allows negative numbers. The "i" stands for "integer."
+
+### Arbitrary bit-width integers
+
+Zig has a large number of other numeric types. Thousands, in fact. For any number N between 0 and 65535, zig has a type for integers of that many bits. These are called "arbitrary bit-width integers". For example, u0 is 0-bits and stores a maximum value of 0 and a minimum value of 0. u16 is 16 bits and stores a minimum value of 0 and a maximum value of 2^16 - 1. i17 is 17 bits and stores a value between -2^16 and 2^16 - 1. Etc.
+
+Why would you use one of these instead of using `usize` everywhere? Well, for the same three reasons that define a type.
+1. Values: Having an explicit maximum lower than the one provided by `usize` can help catch bugs. If you need a maximum greater than `usize`, you can use a u128 or higher.
+2. Usage: To interact with some APIs, you may have to pass a specific sized integer.
+3. Representation: Using an arbitrary sized-integer allows you to control the number of bits backing a specific variable. However, there are two major caveats here. First, as I mentioned, the "hands" (registers) on a 64-bit computer are sized for 64 bits. The computer won't shrink to 8 bits if you're working with a u8. Second, only some integer types (u8, u16, u32, u64, u128, and their signed siblings) are treated specially by the compiler. In most cases, the compiler rounds arbitrary-bit-width integers up to the closest of these 10 primitive integer types. (There are sometimes efficiency savings to be had when working with smaller variables, don't get me wrong. They're just not guaranteed.)
+
+**You**: Okay, well that was a lot of numeric types.
+
+Heh, we're not done.
+
+### Floating point
+
+Zig also has `f16`, `f32`, `f64`, `f80`, and `f128`, the floating point types. These are pretty boring since the IEEE-754 standard defines how floating point numbers work, so they're the same in every language. Not even a revolutionary language like Zig can challenge the IEEE-754 since that's the only format that the floating point unit inside your computer understands.
+
+### `comptime` numbers
+
+But don't worry, I saved the best for last. (That's not true, the best is `usize`, and I did that first.)
+
+But two of the most interesting numeric types in Zig are `comptime_int` and `comptime_float`. Now, there's a whole section on comptime where I describe the real semantics. But the fundamental idea of `comptime_int` isn't that complicated. Basically, it's an integer that's known at compile time. Let's run through the three aspects of a type again, but this time for `comptime_int`:
+
+1. Values: comptime_int can store any integer value (with no minimum or maximum)
+2. Usage: comptime_int can only be used at compile time. It must be coerced into a runtime type before being used at runtime (although Zig is smart enough to do this for you in most cases.)
+3. Representation: N/A. It has no runtime representation because it doesn't exist at runtime and the compile-time representation of information is a closely guarded secret of the Zig core team. ("comptime_int is modeled as an integer with an infinite number of bits..."; I hear there's an initiation when you become a Zig core team member where they blindfold you and take you to a vault deep underground. They whip off your blindfold and you bow to the magic computer they keep there, which has an infinite number of bits to store the infinite bits in everyone's comptime_ints.)
+
+Here's an example of Zig coercing a comptime_int into a usize.
+
+```zig
+const a: comptime_int = 10000000;
+
+const b: usize = a;
+```
+
+There’s not thing special happening here, the coercion is safe so it just happens.
+
+If you don't specify a type, comptime_int is the default. (Or, more accurately, the type of the variable is taken from the type of the value, and literal numeric values have a type of `comptime_int`.)
+
+```
+const c = 1000000; // c is a comptime_int
+```
+
+### Picking a numeric type
+
+Personally, when it comes to picking a numeric type, I follow pretty simple rules: use `f64` for floats, `comptime_int` for comptime integers, and use `usize` for integers, unless the number of bits is important.
+
+**YOU**: When is the number of bits important?
+
+Well, Zig has `packed` structs, which I'll discuss in a later chapter, and packed structs make use of arbitrary-bit-width-integers to create "structs" with very specific sizes. Or, for example, I had a number that I wanted to display in binary on 6 LEDs. I, of course, used a `u6`. But most of the time I just use a `usize`.
+
+**Matthew Lugg**: Edge cases matter!
+
+**YOU**: Who's this?
+
+Ah, this is Matthew Lugg, a Zig core team member, one of the primary developers of the language. He's a `usize`-hater, but in the spirit of fairness, I've invited him here to share his view.
+
+**Matthew Lugg**: `usize` has the specific purpose of being the native pointer size. That makes it natural for representing things like "how long is this thing in memory", but not much else. Using `usize` is very rarely actually desirable, because it adds target-dependence to your program's behavior. And... you're not actually benefiting from this difference?
+
+**Matthew Lugg**: You can do 64-bit operations on 32-bit targets, and vice versa, and it's not any easier to write code with `usize` compared to a fixed-width type. I think people like to use `usize` to mean "it'll be big enough, I don't want to think about overflow",
+
+Pretty much.
+
+**Matthew Lugg**: but that is just a bad idea; if that is your intent, then just use `u64` instead. It ensures that you don't get randomly different behaviour when someone builds your program for a different target.
+
+**Matthew Lugg**: Typically, I would decide like this:
+* If you are storing a pointer as an integer, use `usize`
+* If you are storing an in-memory length which could be arbitrarily large, use `usize`. (But often there actually is a fixed upper bound on lengths! e.g. many of the compiler's internal data structures assume u32 lengths, saving a lot of memory on 64-bit targets.)
+* Consider whether there are fixed bounds for your type. If so, use the smallest integer that fits those bounds.
+* If you actually need to represent arbitrarily large values you'll need a `std.math.big.Int`
+* If there aren't obvious bounds... well, an integer always has *some* bound, and edge cases matter! Usually you just need to pick a bound and roll with it.
+
+**Matthew Lugg**: I should be clear though that, in production code, not thinking about overflow is simply never the right thing to do.
+
+Thanks Mlugg!
+
+**YOU**: Thanks Mr. Lugg.
+
+**Blix the Cat [from backstage, not yet introduced]**: Thanks Mlugg
+
+Okay, I think we're finally done with numeric types.
+
+## Arithmetic
+
+If you thought there were a lot of numeric types in Zig, there are a lot of arithmetic operators.
+
+**YOU**: I thought the only arithmetic operations were addition, subtraction, multiplication and division.
+
+Well, remember one of the themes of Zig is clarity of semantics. Let's use subtraction as a motivating example. Zig has what you might call normal subtraction:
+
+```zig
+const a = 10;
+const b = a - 5;
+std.debug.print("{}", .{ b }); // prints 5
+```
+
+Nothing to it. But Zig has three (3) other ways to do subtraction. For example, it also has a saturating subtraction operator.
+
+**YOU**: Four ways to do subtraction! Why does it need a saturating subtraction operator‽
+
+Of course it has a saturating subtraction operator. Why wouldn't it? Why doesn't every language? It's the simplest thing in the world. Humans invented saturating subtraction hundreds (if not thousands) of years before negative numbers.
+
+Saturating subtraction is perhaps best explained by an example:
+```zig
+const a = 10;
+const b: usize = a -| 13;
+std.debug.print("{}", .{ b }); // prints 0
+```
+See, b is a usize, and so when you subtract 13 from 10, you have a problem. `usize` can't represent -3, so you have what we generally call "overflow" (even if, in this case, it's more accurately described as underflow). There are no fewer than four different ways to deal with the problem of overflow, and Zig gives you 4 different ways to do subtraction depending on which one you choose.
+
+Assuming the result needs to be a `usize`:
+1. `10 - 13`: "normal" subtraction. In debug mode, this panics (stopping execution and telling you what happened). In release mode, this triggers undefined behavior. I'll talk about this more later, but this is the default because this pattern (panic on undefined behavior in debug mode) is very natural to Zig.
+2. `10 -| 13`: Saturating subtraction. If the subtraction would underflow, returns the smallest representable value. In this case, 0.
+3. `10 -% 13`: Wrapping subtraction. Returns 2^64 - 3 on a 64 bit computer. Often, this is equivalent to the undefined behavior of normal subtraction, however, this is not undefined behavior. Using `-%` indicates to the compiler and to the reader not just that you want the subtraction to wrap around—it means that you intend for the subtraction operation to wrap around.
+4. `std.math.sub(10, 13)`: Erroring subtraction. Raises an error.Overflow on overflow. We haven't talked about errors yet, but it's good to know it exists.
+
+**YOU**: So there are four ways to do subtraction.
+
+At least. `std.math.sub` is implemented using the `@subWithOverflow` builtin, so if you wanted to do something else with overflow, you could use that. It returns a tuple with the result and a u1 carrying the overflow bit.
+
+And of course, since addition and multiplication can also overflow, there are also different versions of them. Bask in the Clarity.
+
+When I was younger, I was a “math kid.” My Mom reiterates stories of how I would tell her about math problems on my way home from school. I would watch Numberphile and Matt Parker videos and hope that my neighbor, a PHD in mathematics, would tell me what her favorite bits of math were. Once she explained to me, when I was in elementary school, how some infinities were bigger than others. I was skeptical, but she explained how if you had an infinite number of items, and for each item, took a copy of every other items, you would end up with an new infinity which was larger than the one you started with. I was unconvinced—surely both infinities were infinite, and therefore the same size. I now, several university courses later, have some foggy understanding of difference between the magnitudes of different infinite sets.
+
+Because of my experience listening to people explain fuzzy concepts on the edge of mathematics, it was abundantly clear to me that math was invented, and not discovered. Math is not a set of prescribed rules that you always have to follow. 10 minus 13 doesn't always equal -3, sometimes it equals `.{ 18446744073709551613, 1 }`. And I'm glad that Zig gives me the power and control over those semantics.
+
+```zig
+const std = @import("std");
+
+pub fn main() void {
+    std.debug.print("{}", .{ @subWithOverflow(@as(usize, 10), @as(usize, 13)) });
+}
+```

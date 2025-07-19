@@ -1,0 +1,124 @@
+---
+.layout = "chapter.shtml",
+.title = "",
+.date = @date("1970-01-01T00:00:00"),
+.author = ""
+---
+
+# Chapter B: Welcome to Zig
+
+Now, Zig is a systems programming language. That's a BS term that means that it allows (and often requires) you to interact with the computer at a lower level than a lot of scripting languages, for example. Some scripting languages are designed to make it possible to allow you to make things as easy as possible with as little prior knowledge as possible. Zig, however, is not interested in being as easy to use as possible, and it's not interested in hiding the complexity of modern computers from you. On the contrary, Zig is interested in allowing you to build the most performant, the most efficient, the most correct, and the most powerful software possible. And in order to do that, it assumes that you have more underlying knowledge than some other programming languages.
+
+So before we can learn Zig we have to learn a little bit about computers. As you used to know, computers are machines, they're made out of wires, and every wire can store an electrical signal that is either high or low.
+
+Since we're not computers, we usually write these signals as 0s and 1s.
+
+Often, these 1s and 0s represent numbers, and we call them binary. You remember binary, I hope?
+
+**YOU:** I have some basic knowledge of binary.
+
+Glad to hear it.
+
+**YOU**: How does the computer represent negative numbers or decimals though?
+
+Negative numbers are stored in two-compliment binary, and decimals are stored using floating point. You don't need to know how those work, just know that they do. You can look them up if you want more information (they're not specific to Zig).
+
+But more broadly, these electronic signals can represent any data that the programmer wishes. Strings, or files, or dates, or images, or quality scores, they're representable by high and low voltages inside of the computer. Many people would say that computers "really" operate on numbers, or on 1s and 0s, but of course computers can also operate on lots of other types of data.
+
+**YOU**: Why do people say that computers use 1s and 0s if they're really high and low signals?
+
+Because there's a standard mapping from the electrical signals to binary numbers. Numbers are a kind of universal language that can represent any other type of data (text in any language or any images format or etc), they're easily read by humans, and it's often not wrong to think of other data as numbers.
+
+This is important because Zig requires you to understand, to some degree, what the zeros and ones that your program uses actually look like, as well as where they are stored in the computer's memory.
+
+Let's do an example. You don't have to perfectly follow along.
+
+```zig
+const std = @import("std");
+
+pub fn main() !void {
+    const my_string = "RUN";
+    const std_out_writer = std.io.getStdOut().writer();
+    try std_out_writer.print("{any}\n", .{ std.mem.asBytes(my_string) });
+};
+```
+
+I'm not going to pamper you with artificial simplifications, because the Zig programming language won't either. This is our first example Zig program. You can save it in a file called `warning.zig` and run it with `zig run warning.zig`. It will print to your terminal (assuming you're using a version of Zig around 0.14), several numbers.
+
+```sh
+$ zig run warning.zig
+{ 82, 85, 78, 0 }
+```
+
+These numbers represent the string "RUN". (Unlike the uncivil languages like C that use the null-terminating byte (the hindmost 0) to indicate the extent of the string, Zig includes the null byte only for the fun of it.)
+
+Of course, this is not the only numerical representation of this data, and
+
+**YOU**: Hold on a minute. Are you trying to tell me that that monstrosity is "Hello, World" in Zig?
+
+Yes.
+
+Do you have a problem with that?
+
+**You**: Well, it's just, I'm used to Python where Hello, World is `print "Hello World"`. I thought Zig was simple and this doesn't seem very simple.
+
+Ah. Aahhh. Kids these days. When I was in high school I had to learn Java, since that was the only language the College Board understood. You couldn't write "Hello, World" without creating a class!
+
+But your point is a fair one. One of Zig's goals is clarity. The above code snippet is not simple, in one sense—it has a lot of parts, and  some of those parts are difficult to understand. But it is simple in that it is clear.
+
+Java's verbosity serves obfuscation and bureaucracy and depth. Zig is shallow. It's like looking through a pool of water three feet deep and remarking that it's murky because you can see the dirt on the bottom.
+
+To cut to the chase. The Zig standard library has (at least) three distinct ways of writing to the terminal. What I've shown is the most correct one for a program like a Hello World program whose job it is to write to the terminal. I'll show you two more now:
+
+```zig
+const std = @import("std");
+
+pub fn main() !void {
+    const my_string = "Help I'm trapped in a Zig code example factory!\n";
+    // Get a Writer to standard out and print using it
+    const std_out_writer = std.io.getStdOut().writer();
+    try std_out_writer.writeAll(my_string);
+    // Print to standard error for debugging
+    std.debug.print(my_string, .{});
+    // Log a message to standard error at the .debug log-level
+    std.log.debug(my_string, .{});
+}
+```
+
+This example writes “Hello World” to the terminal three times, first by writing directly to standard output, second by printing debug output to standard error, and a third time by using the standard-library's logging framework.
+
+I could spend 5 chapters just walking through this example. So much of the Zig language is on display here. But the thing that's most important to grasp is the brutal expressiveness. Every piece does its job well, and does nothing but its job. People talk about complexity as if complex things merely have a lot of pieces, but a brick wall is not very complex, despite having a lot of bricks. Complexity arises when pieces start doing multiple orthogonal things.
+
+Each of these methods of printing has a slightly different purpose and each of them have slightly different semantics. All of them individually are quite simple.
+
+Notice the `try` in front of the call to `writeAll` but not the other two. This is because if your program is writing intentionally, using a Writer (Zig's standard interface for writing), you want to handle the errors (in this example, try tells the language to re-throw the error). But if you're using doing print-debugging, you don't want to handle the error—so in the implementation of `std.debug.print`, it calls Writer.print, but ignores the error for you.
+
+The implementation of std.debug.print:
+
+```zig
+lockStdErr();
+defer unlockStdErr();
+const stderr = io.getStdErr().writer();
+nosuspend stderr.print(fmt, args) catch return;
+```
+
+`std.log` is Zig's standard library logger interface. Without regurgitating the docs, going through this logger interface is very convenient for anything more than a debug print. By default it prints to standard error, but it's easy to provide a custom logging function. This allows you to log info into a file or a logging demean. And in release modes it automatically removes unneeded log statements at compile time.
+
+[`std.log` in the Zig standard library documentation](https://ziglang.org/documentation/0.14.1/std/#std.log)
+
+As mentioned already, `std.debug.print` and `std.log.*` print to standard error. This is on the basis that standard out should be used for your program's real output, whatever that maybe (possibly nothing). In contrast, logging information about the execution of your program is not your program's main output, so it should happen on standard error.
+
+But I jumped ahead of myself. I assumed that you know how to use a terminal and text editor already. Do you?
+
+**YOU**: Excellent. It would be improper for me to explain that here; everyone knows the correct way to learn how to use a terminal is pestering people in #linux on http://libra.chat/.
+
+While you can install Zig through your system package manager, many people (including me) install it by downloading pre-built binaries from ziglang.org. If you go this route you have to ensure it's added to your shell PATH (and don't move the zig binary—it has to be able to find the lib/ folder which is also included in a Zig download).
+
+Zig is pre-1.0, meaning that the language will change and break frequently. This guide is written assuming Zig 0.14.1.
+
+You can then write your Zig code in a plain text file with the `.zig` file extension, and run it with `zig run dont_listen.zig`. There are really four ways to compile Zig code.
+1. `zig run` which compiles and runs
+2. `zig build-exe` which builds an executable that you can run later
+3. `zig build-obj` which builds an object file that can be linked with a primary executable
+4. `zig build` which looks for a `build.zig` and uses it to build your project
+We'll talk about `zig build` in a later chapter, but for now `zig run` should be sufficient for experimentation.

@@ -1,0 +1,18 @@
+---
+.title = "",
+.date = @date("1970-01-01T00:00:00"),
+.author = "",
+.layout = "chapter.shtml"
+---
+
+# Control Flow
+
+Control flow refers to the order that statements are executed. If your program could only execute statements once from top to bottom it would be of very limited usefulness (for most conventional definitions of usefulness, which should not be the only criteria on which things are judged). The most powerful control flow structure in Zig is of course the function; however that will not be covered in this chapter. We will instead focus on the loops (for and while), ifs, and blocks. Blocks are not really control flow structures and so the chapter title is increasingly misleading.
+
+If statements are so simple that it's remarkable to me how many languages mess them up. Zig, thankfully, does not. Aside from the fact that the syntax is so sensical, the second most interesting thing about Zig's if statements is that they are expressions. That is to say, they return the result of the evaluated branch, and the brackets are optional. This allows you or I to use an if statement inline instead of some whack'o'mol'd ternary expression syntax.
+
+Now, the if-statement-with-bracket syntax is not a special case, it actually arises from if statements as expressions and Zig's blocks, which are also... expressions! Anywhere you can place a value, you can place brackets. To avoid surprise and confusion, normal, that is to say, unadorned, unannotated, naked, brackets return void. In order for brackets, or a block, in Zig to live up to its potential and return any value; sorry, I don't mean to imply that YOU haven't lived up to your potential or that you don't have any value, it's just unfortunate wording. Unlabeled blocks are just as valid and valuable as labeled blocks. Here, let's just do an example.
+
+```zig
+
+```
