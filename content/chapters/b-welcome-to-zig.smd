@@ -122,3 +122,5 @@ You can then write your Zig code in a plain text file with the `.zig` file exten
 3. `zig build-obj` which builds an object file that can be linked with a primary executable
 4. `zig build` which looks for a `build.zig` and uses it to build your project
 We'll talk about `zig build` in a later chapter, but for now `zig run` should be sufficient for experimentation.
+
+[Next Chapter](c-counting)

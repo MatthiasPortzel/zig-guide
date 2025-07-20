@@ -16,3 +16,5 @@ Now, the if-statement-with-bracket syntax is not a special case, it actually ari
 ```zig
 
 ```
+
+[Next Chapter](h-functions)

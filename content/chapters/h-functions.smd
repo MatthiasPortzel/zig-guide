@@ -219,3 +219,5 @@ fn getBestOfSiblings (node: Node, alloc: std.Allocator) *Node {
 The second option is obviously more complicated—it requires taking an allocator, and it requires that the parent remember to free that memory (to avoid memory leaks). However, it has the advantage of maintaining the API and continuing to return a pointer to Node. If your Nodes are always stored on the heap and your program works with Node pointers, this may be preferred.
 
 The other reason to prefer heap allocation passing pointers is that you cannot dynamically allocate on the stack in Zig. The compiler needs to know, at compile time, the size of all arrays, variables, constants in a given function's stack frame. This size cannot change at runtime and it cannot change between different calls to the function. So if you have a function which returns an array of N nodes, and you don't know N (or an upper bound for N) at compile time, you have to allocate the N nodes on the heap and return the pointer.
+
+[Next Chapter](i-structs)

@@ -112,3 +112,5 @@ In this example, we first create an enum, and list out all of our possible state
 Notice the leading `.` before the enum value. This is called enum-literal syntax. It only works when Zig can determine the type of the enum from context, which it can here because it knows the type of the `currentColor` variable. This leading `.` will continue to show up in Zig in other places. It means a couple different things, but when it's in front of an identifier like this, it means, "look this up in context."
 
 ## Unions
+
+[Next Chapter] (e-arrays)

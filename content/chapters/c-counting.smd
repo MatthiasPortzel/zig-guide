@@ -173,3 +173,5 @@ pub fn main() void {
     std.debug.print("{}", .{ @subWithOverflow(@as(usize, 10), @as(usize, 13)) });
 }
 ```
+
+[Next Chapter](d-short-circuiting-and)
