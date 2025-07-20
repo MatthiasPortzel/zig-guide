@@ -35,6 +35,10 @@ nav > * {
     padding: 20px;
 }
 
+.content a:not([target]) {
+    text-decoration: none;
+}
+
 .content a:not([target])::after {
     display: inline-block;
     content: '';
