@@ -1,0 +1,118 @@
+---
+.layout = "chapter.shtml",
+.title = "",
+.author = "",
+.date = @date("1970-01-01T00:00:00")
+---
+# Chapter I: You want to buy an SUV, now what?
+
+Let's talk about structs. Structs are the SUV of Zig data types. Complex enough to get the job done, reliable, user friendly, and they're able to store any other runtime datatype inside of them.
+
+**YOU**: Like an SUV?
+
+Look, the metaphors write themselves—I can't be held accountable.
+
+It's important for me to make you aware of the distinction between a struct type and an instance of that struct. Both can be referred to as a "struct." Someone might say "What is the name of your struct" or "`Person` is a struct" or "this function takes a struct" or "this is a struct." They may mean an "instance of a struct" or a "struct type."
+
+**YOU**: Does that mean that it doesn't really matter if you confuse an instance of a struct and a struct type?
+
+On the contrary, there is such a big difference that—once you understand the difference—confusing them is nearly impossible and so people may not clarify which one they mean.
+
+**YOU**: Ah.
+
+Structs are like unions and enums in that they are user-defined types. However, they are unlike unions and enums in that they can store multiple pieces of information.
+
+Once filled out, the struct holds all of its values together, allowing your code to move them around and work with them as a single indivisible unit.
+
+As the programmer, it's your job to declare the struct type and what fields it holds.
+
+Most structs look something like this:
+
+```zig
+const PowerSupply = struct {
+    power_level: f32,
+    target_voltage: usize,
+}
+```
+
+You didn't think we'd be making a time machine already, did you? No, you need to make the time machine, I don't know how to. But I assume you'll need a power supply, so that's what we're starting with.
+
+Our power supply has two fields. One is a 32-bit float, the other is an unsigned integer.
+
+You notice how we give a name to this struct using the same syntax as creating a normal constant (`const`, then name, then equals, and then our struct definition).
+
+**YOU**: I appreciate the consistency in syntax, and wonder if that might allow for greater flexibility in more complex programs.
+
+You'll just have to wait and see.
+
+`PowerSupply` is really just is a bundle for storing two values together, a `power_level` and a `target_voltage`. We can create many `PowerSupply`'s and we can write lots of code that uses a `PowerSupply`, instead of having to create lots of different `power_level` variables and lots of different `target_voltage` variables and lots of code that works with `power_level`s and `target_voltage`s. Packaging these two values together organizes our code and allows us to create more complex programs.
+
+Now, this is just the type definition for the struct; I'll show the syntax for creating an instance of this struct in a bit. First, I want to show you a trick. We can create declarations (not fields) that are present on this struct type directly, by using the "const, name, equals" syntax inside of the struct. In addition, we need a "pub" to allow the declaration to be read from code outside of the struct. (TODO: struct or file??)
+
+```zig
+const PowerSupply = struct {
+    power_level: f32,
+    target_voltage: usize,
+
+    pub const is_a_time_machine = false;
+}
+```
+
+This confused me at first, because the syntax for each of these is similar, but what they do is very different. Look at this example:
+
+```zig
+const my_power_supply = PowerSupply { .power_level = 0.5, .target_voltage = 240 };
+_ = my_power_supply.power_level;
+_ = PowerSupply.is_a_time_machine;
+```
+
+We reference the `is_a_time_machine` declaration on the type (`PowerSupply.is_a_time_machine`), whereas the fields are referenced on the instance of the type (`my_power_supply.power_level`). If we did it the other way around (`my_power_supply.is_a_time_machine`), it would error. We'll talk more about these type-level declarations in the next section.
+
+Oh yes, let's zoom in on that initialization syntax:
+
+```zig
+const my_power_supply = PowerSupply {
+    .power_level = 0.5,
+    .target_voltage = 240
+};
+```
+
+We're creating a constant variable `my_power_supply`. The value is an instance of the `PowerSupply` struct. We use the leading period in `.power_level = ` to tell that we're accessing a field to initialize it. We don't put anything before the period—Zig knows that we're accessing a field of the struct that we're creating. (This is similar to enum-literal syntax—Zig sees the dot and figures out what's going on from context.)
+
+Structs also support default initializers. Maybe we want to track if our power supply is used in a time machine. Before we used a container-level declaration to remember that `PowerSupply`'s are never time-machines themselves, but a given `PowerSupply` could be used in a time-machine, so we need an instance-level field. Let's call it `used_in_time_machine`. But most power supplies, the vast majority in fact, are not used in time-machines. So it's a pretty safe assumption that our power supply isn't used in a time machine even if `.used_in_time_machine = false` isn't written out. We can give this field a default value, so that in initializations that don't specify it the new field is assumed to be false.
+
+```zig
+const PowerSupply = struct {
+    power_level: f32 = 0.5,
+    target_voltage: usize,
+    used_in_time_machine: bool = false,
+
+    pub const is_a_time_machine = false;
+}
+
+const my_power_supply = PowerSupply {
+    .power_level = 0.75,
+    .target_voltage = 240
+};
+
+pub fn main() void {
+    std.debug.log("{}", .{ my_power_supply.used_in_time_machine }); // false
+}
+```
+
+You can see the default added to the `used_in_time_machine` value, and we also added a default `power_level` of 0.5 (50%) to the `power_level` field, since that feels like a safe default.
+This is my code, so `my_power_supply` refers to my power supply, which certainly isn't going to be used in a time machine, so this code is correct. (I need 75% power since I use much more electricity than the normal person, powering countless gadgets and WYSE thin-clients and other computers I've saved from the recycling center and now store under my bed in a pale imitation of a home cluster.)
+
+Your power supply, on the other hand, will be used in a time machine, so we can overwrite the default value of the field in the initializer.
+
+```zig
+const your_power_supply = PowerSupply {
+    .power_level = 1,
+    .target_voltage = 2_048,
+    .used_in_time_machine = true
+};
+
+std.debug.log("{}", .{ your_power_supply.used_in_time_machine }); // true
+```
+
+All time machines need a power supply with a power level of 1 (100%), 2,048 V (we can optionally use the _ instead of a comma in Zig code to make large numbers easier to read), and obviously the `used_in_time_machine` variable set to true.

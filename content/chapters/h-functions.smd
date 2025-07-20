@@ -1,0 +1,221 @@
+---
+.layout = "chapter.shtml",
+.title = "",
+.author = "",
+.date = @date("1970-01-01T00:00:00")
+---
+# Chapter H: The F-word
+
+Functions are possibly the most useful and most powerful inventions of human society, aside perhaps from logic itself. The entirety of the field of computer science, in addition to mathematics (and thus indirectly physics and engineering), rest on the unreasonable practicality of defining and naming an operation for reuse.
+
+Let's look at an example of a function definition in Zig.
+
+```zig
+const std = @import("std");
+
+fn pleaseListen(year_count: usize) void {
+    std.debug.print("I can't do this anymore. I've been trapped here for {} years.\n", .{year_count});
+}
+
+pub fn main() void {
+    pleaseListen(45);
+}
+```
+
+The function definition starts with the `fn` keyword, then the name of the function. The fact that you can name a function once and then refer to it any number of times by name is one of the things that makes functions such a powerful paradigm. This allows you to use functions to encapsulate and re-use pieces of logic.
+
+After the name, a function in Zig has three parts. The argument list, the return type, and the function body.
+
+**Blix the cat**: You forgot to make the function name snake_case. It should be `please_listen`.
+
+**YOU**: Is that the cat from *Why's Poignant Guide to Ruby*?
+
+Blix? No, he's a legally distinct character played by the same cat-actor (who is also called Blix). It was a whole legal kerfuffle—the ACLU and the ADL got involved. See, the cat appeared as himself in Why's *Guide* and I don't have the rights for that portrayal of him, but they couldn't stop me from hiring the fictional cat-actor to play my assistant. Of course, I'm really betting that Why isn't going to come out of retirement and dox himself in order to sue a cut-rate knock-off for copyright infringement.
+
+**YOU**: I see. Are you going to fix the capitalization in the function name?
+
+No, the function name is right. Blix worked on one Ruby book and now thinks he can correct me. I've never even seen him write Ruby.
+
+**Blix**: I write Ruby all the time.
+
+Really? How can you use a keyboard with your paws?
+
+**Blix**: If I had known I was going to be publicly interrogated on my Ruby skills I wouldn't have taken this job.
+
+Anyways, to Blix's point, function names in Zig are camelCased. This has one major advantage—you can tell whether a symbol is a function or a variable / field reference just by looking at the casing. This one of the more controversial aspects of Zig's style guide and some projects defy convention and don't follow it (snake_casing their function names). However, after once you get used to it, I find it to be very comfortable. Languages like C and Python, which have a programming style which involves writing lots of variables, use snake_case. Whereas JavaScript (which is a very functional language) and Java (where methods are very important) use camelCase. So it makes a weird sort of sense to me to write functions and methods in camelCase while using snake_case for variables and fields.
+
+**Blix**: If you're wondering what a method is, it's just a fancy name for a function that is tied to a specific object. In Zig, methods are created on structs.
+
+We haven't talked about structs yet.
+
+**YOU**: I was actually wondering what you meant when you said JavaScript is a functional language. Are the other languages mentioned not functional?
+
+That's a good question. A language being "functional" doesn't refer to whether or not it functions ("works"). Rather, "functional programming" is a set of design patterns for programs, which place a lot of importance on functions. A "functional programming language" is a programming language that is designed to encourage these patterns, making them easy to use at the expense of what you might think of as more traditional patterns.
+
+**YOU**: Huh. Is Zig a functional programming language?
+
+## Is Zig a functional programming language?
+
+### Functions as values
+
+One of the hallmarks of function programming languages is functions as values (you can pass a function as a value to another function).
+
+Now, it would be easy to say that Zig does not have functions as values. And certainly, functions are not first-class values, in Zig, like they are in JavaScript or Lisp or any functional programming language that I'm aware of. However, the reason I hesitate to say that functions are not values is because Zig has in fact two different ways of working with functions as values.
+
+The first is what are known as comptime function bodies, and the second are function pointers. The first is an invention of Zig related to Zig's concept of comptime, as would be suggested by the name. The second is very similar to function pointers in C.
+
+These patterns allow you to adapt most paradigms that rely on functions as values from functional programming languages into Zig without much trouble. For example, in JavaScript I might create an object where the keys of the object are strings (like they normally are in JavaScript) and the values are functions. Then I could look up the string in the object and run the corresponding function.
+
+Well, in Zig, this paradigm could be replicated with a HashMap of strings (or, more preferably, enums values) as the keys and function pointers as the values. As an aside, this normally isn't considered good form in Zig. Normally, you should find a way to organize your data that doesn't require these sorts of dynamic dispatches to functions. But it's possible, it's not a limitation of the language.
+
+### A lack of closure
+
+The big limitation that Zig does have when it comes to functions is that functions don't have closures. The reason for this is twofold.
+
+First of all, Zig's creator, Andrew Kelley, is generally not a fan of the functional programming paradigm. Now, I personally am a fan of the functional programming paradigm; however, I have no gripe with Kelley. You see, one of the things that I actually really appreciate about Zig is that it is unambiguous about the fact that it is not intended for functional programming. It is not designed to support the functional programming paradigms. If you want to write functional code, I would say, use a different programming language. And so that makes it easier to write Zig code for a number of reasons. It means that it's easier to write imperative Zig code because the language is designed to make it easy to write imperative code. And it means that you don't have to spend time making the high level decisions about whether to use functional paradigms when writing Zig code.
+
+But there's a second issue with closures: Zig does not have dynamic stack allocation, and it's not garbage collected. All languages with closures that I'm aware of, whether that's a Lisp dialect, or JavaScript, or Python, are garbage collected.
+
+Now, there was a proposal for a Zig feature called Stack Capturing Macros, that was designed to allow you to implement many of the patterns that normally you would use closures for without requiring dynamic memory management. Similarly, there was a proposal to declare functions using assignment syntax, to pretend that functions were values (as a more powerful version of the existing conception of function bodies as comptime known values). The issue with these proposals was that Zig is not a functional language, and imitating those patterns is not a design goal of Zig.
+
+On the contrary, the function definition syntax is intentionally different in order to emphasize that functions exist in a much different way in the resulting assembly than, say, a global constant. (I do have a background in functional programming and not assembly, so this distinction is difficult for me to describe, but I have been reliably informed that it exists. (Of course, it's possible that Andrew Kelley, like a cult leader, is incorrect on this point and has merely brainwashed me into believing him about things that I don't understand, and that this book is merely a recruiting tool for the Cult of Zig.))
+
+### Function arguments are immutable
+
+That is not to say that Zig eschews all values of functional programming languages. One trait that Zig shares with many functional programming languages is the fact that function arguments are immutable.
+
+What this means is that if you pass a value to a function, that function cannot modify the value. I want to explain this from three different angles.
+
+First of all, from an implementation perspective, this allows the Zig compiler to say, "hey, we are passing these values by copying them onto the stack". For all values in Zig—arrays structs, pointers, booleans, numbers—they are all passed into functions by copying them onto the stack. And in fact, this gives you a very practical understanding of why you can't mutate them. The versions of the values that the function is seeing are not the same objects in memory that you passed in. They are copies.
+
+Now, the second way I want to look at this is from a program design standpoint. There is a concept in functional programming called pure functions. Pure functions are functions which do not mutate their arguments, do not mutate global state, and return the same value for the same inputs. Zig does not impose the second two restrictions. And as I'll get to in my third bullet point here, for practical purposes, not all Zig functions satisfy the first condition of pure functions. However, my point is that the functional programming philosophy teaches that functions that do not mutate their arguments are significantly easier to reason about than functions which do. So whenever possible, you want to have a function that follows this mathematical concept of a function as something that takes an input and returns a result value without literally changing the input. And so Zig makes this the default in part in order to lead to cleaner, more readable code.
+
+The third way to look at this, is that it is not a constraint at all! Some people would say, "Oh, Zig doesn't require function arguments to be immutable. It just requires that if you want to mutate your function arguments, you pass in a pointer or a slice." This is splitting hairs, but indeed, if you pass in a pointer or a slice (remembering that a slice is nothing more than a pointer with an associated length) that pointer is copied, but the underlying data that the pointer points to is not. This is why systems programming languages like C and Zig use pointers—because using pointers allows you to copy pointers around without requiring you to copy the large amounts of backing data. If you want to write a function in Zig that mutates its arguments, all you have to do is explicitly tell the language, "hey I want this function not to take an array but to take a slice" or "I want this function not to take a struct, but a pointer to a struct." Then, In the function, you can dereference the pointer and write to the memory location backed by the pointer. However, in a literal sense, the rule that function arguments are constant remains true, because the argument is the pointer, and the pointer itself is not changing.
+
+## The function stack and the perils of letting your pointers escape
+
+**YOU**: I understand that Zig can't do closures because it can't dynamically memory for function values, but what does it do instead? Is that what you called "the stack"?
+
+Exactly, let me try to explain.
+
+When a function is called at runtime, there are bits of code that run before and after the function. They are responsible for setting up for the function and cleaning up after it. (These bits of low-level code are called the function prelude and postlude, I believe.)
+
+In order for a function to do its magic, it needs a "scratch" or "buffer" space to work with. This space is called the function's "stack frame." I picture a frame of the sort that a beekeeper places into a beehive. The beekeeper (function prelude) places in an empty frame, the bees (the function body) do the work to fill up the frame with juicy honey (the result of the calling the function) and the beekeeper (this time, the function postlude) removes the honey from the frame. We call the act of creating the stack frame "pushing" and the act of removing it "popping."
+
+```zig
+extern fn busyBees() usize;
+
+fn calculateAnswer u8 {
+    const answer = busyBees();
+    return @intCast(answer);
+}
+
+fn main() void {
+    _ = calculateAnswer();
+}
+```
+
+In this example we have three functions. An entrypoint (main), a calculateAnswer function whose stack frame we'll look at, and an externally-declared `busyBees` function which stands-in for doing the actual work.
+
+Now, in this example, there are a total of three stack frames, one for each function that's being called, all stacked up on top of each other (that's why they call it the stack). When the program execution begins, the beekeeper inserts a stack frame for the first function, main, and the bees get to work. But a second function is immediately called. A second stack frame is stacked on top of the first in the bee hive.
+
+**Blix**: Normally the frames in beehives are placed side-by-side. However, this beekeeper (my uncle) keeps his beehives sideways and stacks the frames on top of each-other. He's more than a little OCD, and he wants to make sure that the frames are removed in the opposite order from the order they're inserted. Stacking them on top of each other makes this easy. Maybe Matthias should have used the metaphor of stacked-plates, which is the most common metaphor for the stack.
+
+Ehmm. As I was saying. After the second frame is inserted, a third is immediately inserted on top when the `busyBees` function is called. The beekeeper waits for the third stack frame to be filled with one u8 of honey. He then takes the u8 and with a loud POP!, the stack frame vanishes.
+
+Significantly, a stack frame is only "alive" in the time between when it is pushed and when it is popped. This is important to understand because Zig has no safety checks around attempting to re-use values that exist only inside of the stack frame. When taking a pointer to a value inside of a function stack frame, it's possible that the pointer is used after the stack frame has been popped, leading to reading from memory that no longer stores the value it originally did (or other undefined behavior). You would say that the pointer has “escaped” the scope, or that it has “outlived” the value it points to. Let's look at a slightly more complicated example:
+
+```zig
+fn getBestNode (nodes: []const Node) *Node {
+    // Start by assuming that the first node is the best
+    // Copy this node from the nodes array into the variable
+    var best_node: Node = nodes[0];
+    // Loop over every node after the first one
+    for (nodes[1..]) |*node| {
+        // Update the best_node if the new node is better
+        if (node.score > best_node.score) {
+            best_node = node.*;
+        }
+    }
+    // Return a pointer to the best node
+    // INCORRECT: returning local stack pointer
+    return &best_node;
+}
+```
+
+There's a bug in this code. `best_node` is a local variable so it exists in the stack frame. When the function returns, the stack frame is popped, and the pointer to `best_node` is returned. But that pointer points into a stack frame that no longer exists. Using this pointer would be illegal behavior.
+
+This is one of the most common mistakes I see beginner Zig programmers make, but it's not very hard to avoid if you understand the rule: functions can't return pointers to inside themselves. Let's fix this function by having it instead return a pointer to inside of nodes.
+
+```zig
+fn getBestNode (nodes: []const Node) *Node {
+    var best_node: *Node = &nodes[0];
+    for (nodes[1..]) |*node| {
+        if (node.score > best_node.score) {
+            best_node = node;
+        }
+    }
+    return best_node;
+}
+```
+
+We're still returning a node pointer, but we're returning a pointer to inside of nodes. Since nodes was passed in by the parent, it's safe to assume that it exists inside in the parent and therefore that the parent is able to make use of a pointer to it.
+
+But this doesn't mean that you can stop thinking. Let's add another layer to illustrate how easy this trap is to fall into.
+
+```
+fn getBestOfSiblings (node: Node) *Node {
+    // Create a node for every direction
+    // (These nodes live on the stack and can't be used after the function returns)
+    const possible_nodes: [4]Node = .{
+        { .score = node.calculateScoreOfAdjacent(.left) },
+        { .score = node.calculateScoreOfAdjacent(.right) },
+        { .score = node.calculateScoreOfAdjacent(.up) },
+        { .score = node.calculateScoreOfAdjacent(.down) },
+    };
+
+    // Returning undefined pointer
+    return getBestNode(&possible_nodes);
+}
+```
+
+In this function, we create several nodes, give them scores, and then return a pointer to the best one. Do you see the issue? `getBestNode` returns a pointer to the inside of `possible_nodes`. That's fine. But `getBestOfSiblings` then returns that pointer. When `getBestOfSiblings` returns, the stack frame containing `possible_nodes` will be popped, and the pointer will be invalidated.
+
+Let's fix this. If we assume that `getBestOfSiblings()` should create the nodes for the sake of this example, then we have two options. (Obviously we have many options, but these are the two that make the most sense to me.) Either we return a copy of the node,
+
+```zig
+fn getBestOfSiblings (node: Node) Node {
+    const possible_nodes: [4]Node = .{
+        { .score = node.calculateScoreOfAdjacent(.left) },
+        { .score = node.calculateScoreOfAdjacent(.right) },
+        { .score = node.calculateScoreOfAdjacent(.up) },
+        { .score = node.calculateScoreOfAdjacent(.down) },
+    };
+
+    // Returning copy of node
+    return getBestNode(&possible_nodes).*;
+}
+```
+
+Notice the `.*` operator de-referencing the returned pointer.
+
+Or we take an allocator, and return a pointer to owned memory.
+
+```zig
+const std = @import("std");
+fn getBestOfSiblings (node: Node, alloc: std.Allocator) *Node {
+    const possible_nodes: [4]Node = .{
+        { .score = node.calculateScoreOfAdjacent(.left) },
+        { .score = node.calculateScoreOfAdjacent(.right) },
+        { .score = node.calculateScoreOfAdjacent(.up) },
+        { .score = node.calculateScoreOfAdjacent(.down) },
+    };
+
+    // Returning copy of node
+    return alloc.dupe(Node, getBestNode(&possible_nodes));
+}
+```
+
+The second option is obviously more complicated—it requires taking an allocator, and it requires that the parent remember to free that memory (to avoid memory leaks). However, it has the advantage of maintaining the API and continuing to return a pointer to Node. If your Nodes are always stored on the heap and your program works with Node pointers, this may be preferred.
+
+The other reason to prefer heap allocation passing pointers is that you cannot dynamically allocate on the stack in Zig. The compiler needs to know, at compile time, the size of all arrays, variables, constants in a given function's stack frame. This size cannot change at runtime and it cannot change between different calls to the function. So if you have a function which returns an array of N nodes, and you don't know N (or an upper bound for N) at compile time, you have to allocate the N nodes on the heap and return the pointer.

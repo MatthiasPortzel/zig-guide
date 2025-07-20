@@ -17,11 +17,10 @@
 
 E: (Arrays)
 
-E: (Pointers and Slices)
+F: (Pointers and Slices)
 
-F:
+G: (Control Flow)
 
+[H: The F-word (Functions)](./h-functions)
 
-G
-H
-
+[I: You want to buy an SUV, now what? (Structs)](./i-structs)
