@@ -1,0 +1,136 @@
+---
+.title = "",
+.date = @date("1970-01-01T00:00:00"),
+.author = "",
+.layout = "chapter.shtml"
+---
+# Chapter J:
+
+In an expression like `a = b`, there's an inherit ambiguity when it comes to evaluating the type of the expression—does it derive from a or b? This is not a particularly interesting question in most programming languages since the types must be at least compatible, but you'll see that in Zig it allows us to understand an important part of the compiler. Zig evaluates this expression as follows: first it evaluates the left side (if it is non-trivial and needs evaluating), then the language allows the left hand side to supply Result Location information to the right hand side. The right hand side is then evaluated in the context of the Result Location. If the Result Location contains type information (which it doesn't always), then the right hand side will do its best to contort into that type, if it can. If it cannot be coerced, then the right hand side can veto the expected type and throw an error. On the other hand, if the Result Location didn't have type information, then the type of the expression is the type of the right hand side. This forms a sort of very practical compromise where the left hand side gets first say—an initial hint whispered into the air, if you will. But the right hand side, the actual value, gets the final and actual determination as to the type. If only the political left and right could compromise so effectively.
+
+This system is referred to as Result Location Semantics (RLS). RLS's primary purpose is allowing the compiler to determine what location the result of an expression will be stored in (hence the name). However, you, as a Zig user, will interact primarily with RLS's ability to provide type information. 
+
+```zig
+const Answer = enum {
+    right, wrong
+};
+
+const Direction = enum {
+    up, down, left, right
+};
+
+const correct: Answer = .right;
+const dir: Direction = .right;
+const neither = .right;
+```
+
+This example has two enums and three constants. Result Location types are at work in the first and second assignments.
+
+But let's look at the third one first. In this example, the left hand side doesn't have a type. In Zig, this is fine. It just means that when the right hand side is evaluated, it doesn't have a Result Type to coerce to, and the type of the right hand side is used for the resulting variable.
+
+**YOU**: But what's the type of the right hand side? It doesn't look like it has a type either.
+
+Values in Zig always have a type. In this case, `.right` is a special comptime-only type called an enum-literal.
+
+```zig
+comptime {
+    @compileLog(@TypeOf(neither));
+    // > @as(type, @Type(.enum_literal))
+    // This log output is telling us that the type is an enum literal.
+    // Unlike most types, there's no syntax, no keyword, for specifying "enum literal"
+    // Instead, you have to pass `.enum_literal` to the `@Type()` builtin and it will return the enum literal type
+    // So this output is telling us that the expression `@as(type, @Type(.enum_literal))` is equivalent to
+    //  the expression we input, `@TypeOf(neither)`
+}
+```
+
+Enum literals are like comptime integers in that they're used for literals but can only be used at comptime. `comptime_int` must resolve into a runtime integer type, and enum literals must resolve into a specific enum type in order to be used at runtime.
+
+The first and second assignment should now, hopefully, make sense. The left hand side has a Result Type, so when the compiler evaluates the right side, it's able to cast the enum literal into an enum of type `Answer` or `Direction` as appropriate.
+
+## Providing a Result Location
+
+### Constructs that provide result locations
+
+It's important to understand that some constructs, but not others, "provide result locations". Many common operations do:
+
+```
+const Key = struct {
+    data: [256]u8;
+};
+const Keys = struct {
+    number: usize,
+    first_key: Key,
+};
+
+fn unlockDoor(key: Key) void {
+    // ...
+    _ = key;
+}
+
+pub fn main() void {
+    var jailers_keyring: Keys = .{
+        .number = 5, // Result Type provided (`usize`),
+        .first_key = .{ // Result Type provided (`Key`)
+            .data = undefined,
+        }
+    };
+
+    jailers_keyring.number = 1; // Result Type provided (`usize`)
+
+    // Result Type provided to argument (`Key`)
+    unlockDoor(.{
+        .data = @splat(0) // Result Type provided (`[256]u8`)
+    });
+}
+```
+
+This example shows how struct initialization provides Result Locations. It also demonstrates how Result Locations and Result Types can propagate through multiple levels of code. After we declare the type of `jailers_keyring` as `Keys`, Zig is able to provide a result type to all subsequent field accesses in this example, even within the nested struct `Key`. There's even one more Result Type that I didn't have space to annotate: when `@splat` has a Result Location of `[256]u8`, it provides a Result Type (`u8`) to its argument. This way Zig knows that the `comptime_int` `0` should be cast to a `u8`.
+
+One other really cool place where Zig is able to provide a Result Location is the return value of functions:
+
+```zig
+fn scoreAnswer(answer: []u8) Answer {
+    // Some logic ...
+
+    return .wrong;
+}
+```
+
+Because Zig knows the function returns an `Answer`, the `return` statement can provide a result type, and it knows `.wrong` is an instance of the `Answer` enum.
+
+Many other constructs that appear in expressions give Result Locations, including `if`, `switch`, `orelse`, and more.
+
+### Constructs that don't provide result locations
+
+The most annoying example of a construct that doesn't provide a result location is arithmetic. For example,
+```zig
+const foo: usize = 2 + 2;
+```
+In this example, the assignment operator (`=`) provides a result location of `usize` to the `+`. However, the `+` does not provide a result location to it's left or right hand sides. This is almost a bug in Zig, because it's obviously not desirable. However, it hasn't been resolved because there's no obvious solution for how RLS should interact with two values. This sort of three-way negotiation is more difficult than the two-way negation used by RLS. The way Zig currently behaves is that it first resolves the types of the left and right hand side with each-other (using a process called peer type resolution), then checks if that type can cast to the Result Type. This is desirable because it allows numbers to stay `comptime_int`s for longer. (We'll discuss this in the next section on comptime, but in this example, Zig adds the 2 numbers together at comptime. If these locations had a Result Type, Zig would convert the `comptime_int`s to `usize`s first, and then it would be unable to add them at comptime.)
+
+Other instances where Zig is unable to provide a Result Type are pretty obvious. As discussed, when a variable doesn't have a declared type, Zig has to use the type of the value. `anytype` is beyond the scope of this guide, but similarly, if a function takes an `anytype` parameter, Zig can't provide a result type. The best example of this is the second argument to `std.debug.print`:
+
+```zig
+std.debug.print("{}", .{
+    0 // Zig can't provide a result type—you're allowed to print any numeric type
+});
+```
+
+### Result Locations and Built-Ins
+
+There are a couple of commonly used builtins that interact with RLS in special ways.
+
+First, the casting builtins, `@intFromEnum`, `@intCast`, `@enumFromInt`, `@truncate`, and all the others, require a Result Type. Otherwise they will error.
+
+Second, I must talk about the builtin `@as`. `@as` exists to solve a simple problem—it provides a Result Type when there isn't one already.
+
+These two lines are equivalent, although the second one is preferred.
+```zig
+const a = @as(usize, 0);
+const b: usize = 0;
+```
+
+There are many places like this, where there already is a Result Type or there could easily be one. In these cases, the use of `@as` is harmless, but it is bad style, and omitting it is preferred.
+
+If I had attempted to explain `@as` from scratch, it would have taken me very many words. However, with the context of what a Result Type is, there is nothing else to say.

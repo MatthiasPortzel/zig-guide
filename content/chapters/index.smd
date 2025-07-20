@@ -24,3 +24,5 @@ G: (Control Flow)
 [H: The F-word (Functions)](./h-functions)
 
 [I: You want to buy an SUV, now what? (Structs)](./i-structs)
+
+[J: (Result Location Semantics)](./j-rls)
