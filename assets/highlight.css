@@ -15,23 +15,23 @@ pre {
   padding: 10px 5px;
 }
 
-code.ziggy {
+code.zig {
   color: var(--cyan);
 }
 
-code.ziggy .keyword,
-code.ziggy .type {
+code.zig .keyword,
+code.zig .type {
   color: var(--light-yellow);
 }
 
-code.ziggy .string {
+code.zig .string {
   color: var(--dark-yellow);
 }
 
-code.ziggy .numeric.constant {
+code.zig .numeric.constant {
   color: var(--magenta);
 }
 
-code.ziggy .function {
+code.zig .function {
   color: var(--blue);
 }
