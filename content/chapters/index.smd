@@ -17,7 +17,7 @@
 
 E: (Arrays)
 
-F: (Pointers and Slices)
+[F: (Pointers and Slices)](./f-pointers-and-slices)
 
 G: (Control Flow)
 

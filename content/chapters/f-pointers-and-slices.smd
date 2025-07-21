@@ -1,0 +1,56 @@
+---
+.title = "",
+.date = @date("1970-01-01T00:00:00"),
+.author = "",
+.layout = "chapter.shtml"
+---
+
+# Chapter F:
+
+## Pointers
+
+A pointer points to something. Let's dive into the simplest example:
+
+```zig
+var foo: usize = 5000;
+const foo_pointer: *usize = &foo;
+```
+
+In this example, foo is a `usize`, and `foo_pointer` is a `*usize` (read as "pointer to a usize"). Which usize does `foo_pointer` point to? Well, it points to `foo`. `&foo` means "take a pointer to `foo`".
+
+What can you do with a pointer? Well, you can read or write the data that it points to.
+
+```zig
+foo_pointer.* = 100;
+std.debug.print("{} {}\n", .{ foo_pointer.*, foo });
+```
+
+This updates the value in `foo` through the pointer, then prints that value twice, once reading through the pointer and once reading the variable directly.
+
+Pointers don't have to point to variables though, they can also point to other type of memory.
+
+**YOU**: There are different types of memory?
+
+Well, it's not quite right to say that these are different types of memory, since they are all three backed by the same physical memory block. Some diagrams will instead focus on these on different “places” in memory (you can do an image search for "memory layout" to find many images of this diagram). But this isn’t quite accurate either, as there differences to these types of memory beyond their locations in address space.
+
+It’s most accurate to say that there are three different ways of organizing memory.
+
+Static memory is like furniture—your bed, your lamp, the *Open Sauce* and *Game Changer* posters on your wall. Things that don’t move.
+
+The stack is like a shelf of books or a chest of drawers. It’s linear, it’s organized, and it’s very tightly packed. I’ll talk more about The stack in the chapter on Functions, because the stack is sorted per function. The books on my bookshelf are sorted by author’s last name. The data in the stack is sorted by what function it’s associated with.
+
+The heap is the pile of dirty laundry in the middle of your floor. It’s dynamic. You can put as much or as little data there as you want, and you can organize it however you want. It’s unordered, so you can add or remove to any part at any time. It’s also “sparse”—there are big empty sections. Static and stack sections take up only as much space as they need†, and then the remaining space is designated as the heap.
+
+†This isn’t true yet. In current versions of Zig, the stack space is fixed at a reasonable amount (I think it’s 4MB but I have’t checked). It’s a goal of future Zig versions to compute the exact maximum needed stack size at compile time in order to maximize the available heap.
+
+When writing Zig code, variables inside of functions automatically end up on the stack, and variables declared outside of functions (in container scope) end up in static memory.
+
+Pointers to stack and static memory are similar in that they are both (normally) created by taking a reference to a variable (`&some_variable`, as shown earlier). The heap is different because variables are never stored on the heap. In order to access the heap, you need to go through an allocator.
+
+## Allocators
+
+TODO
+
+## Slices
+
+TODO
