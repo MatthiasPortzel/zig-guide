@@ -1,0 +1,74 @@
+---
+.title = "",
+.date = @date("1970-01-01T00:00:00"),
+.author = "",
+.layout = "chapter.shtml"
+---
+
+# Chapter DERF: Just Learn Ruby
+
+Zig is a low-level systems programming language. It values writing strictly correct code and squeezing every last iota of performance out of the CPU. But at times it can feel like there's no room to breathe and no buffer for mistakes.
+
+In those moments when I wake up after a long night writing Zig code for embedded devices, I'm happy to go into work, lean back in my chair, and relax in the warm embrace of 500,000 lines of Ruby.
+
+Ruby doesn't give a pigeon's feather about performance. Why? Because it cares about you. It cares about me. It cares about developer experience and user experience and getting things done, even if it has to spend a couple million clock cycles to do them. Or a couple trillion clock cycles.
+
+Ruby's syntax focuses on communicating just the amount of information that you need. Here's a variable declaration:
+
+```ruby
+my_variable = 5
+```
+
+No `var` or `let` or `const` or type or semicolon.
+Isn't this just Python, you ask. Ruby makes Python look like BASIC.
+
+Ruby is object-oriented.
+```
+class Rectangle
+    attr_accessor :length
+    attr_accessor :width
+
+    def initialize(length, width)
+        length = length
+        width = width
+    end
+
+    def is_square?
+        length == width
+    end
+end
+
+my_rect = Rectangle.new(5, 5)
+
+puts my_rect.is_square?
+# prints "true"
+```
+
+Notice the `is_square?` method. Notice the ? in the method name. ? is allowed in method and variable names in Ruby, and is frequently used to indicate boolean values. Notice the implicit return (no return statement needed)—like you're writing a functional programming language. Notice the lack of parentheses around the calls to `puts` and `is_square?`. Parentheses are optional in Ruby, and are frequently omitted for readability.
+
+Ruby treats method calls as cheap. Since calling a method happens automatically, just by saying its name—no parentheses needed— programmers write many small methods.
+
+Notice the `attr_accessor :length` and `:width` lines. That's not special syntax for declaring fields. No, `attr_accessor` is a method, defined on all classes, and we're calling it. The argument is a symbol, :name, or :width. Calling this method creates an instance variable, and getter and setter methods.
+
+To define a symbol, I find it useful to consult McCarthy's 1960 paper inventing the Lisp language.
+
+> We shall now define … an infinite set of distinguishable atomic symbols
+> For atomic symbols, we shall use strings of ... Latin letters and digits …
+> The symbols are atomic in the sense that any substructure they may have as sequences of characters is ignored. We assume only that different symbols can be distinguished.
+
+I've omitted parts of McCarthy's definition that are not relevant to Ruby's symbols, which are otherwise identical to Lisp's.
+
+In Ruby, symbol literals are denoted with a leading colon, in the same way that strings are denoted with quotes.
+
+Symbols are not strings, because they are atomic. Strings are made up of many characters, and so given the string "the cow said hi", you can ask, does this string contain "cow" (yes, it does). No such question can be asked for symbols. Symbols cannot be broken apart or concatenated, and in fact, the only operation that can be performed on (McCarthy's) symbols is "distinguishing" them, that is, equals and not equals. (From a pragmatic standpoint, this means that a symbol is named often only for a programmer's benefit, and is represented with a 64 bit number or other memory-efficient data-type at runtime.)
+
+Zig, of course, has symbols, but they're called "enum literals" because Andrew Kelley has never read McCarthy's 1960 paper. (I state this confidently based off of only one piece of evidence: Kelley has created Zig, and not a Lisp-like language.) Zig’s symbols are denoted with a leading period.
+
+```zig
+const door_state = .locked;
+comptime assert(@TypeOf(door_state) == @Type(.enum_literal));
+```
+
+Remember that Zig only allows enum literals at comptime. Ruby has no compile-time and so it has no such limitation. Ruby allows you to do anything you can imagine at runtime, like creating methods, as we did with attr_accessor above.
+
+Ruby isn’t a perfect language. (Brackets are objectively superior to `begin`…`end`, for example.) But it is a very beautiful and a very practical language, which is useful for replacing everything from shell scripts to web apps backends. Don’t get lost or distracted by Zig’s beauty and forget to appreciate the beauty in other languages.

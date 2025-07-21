@@ -26,3 +26,7 @@ G: (Control Flow)
 [I: You want to buy an SUV, now what? (Structs)](./i-structs)
 
 [J: (Result Location Semantics)](./j-rls)
+
+K: (Comptime)
+
+[DERF: Just Learn Ruby](./derf-ruby)
