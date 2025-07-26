@@ -4,7 +4,6 @@
 .date = @date("1970-01-01T00:00:00"),
 .author = ""
 ---
-
 # Chapter B: Welcome to Zig
 
 Now, Zig is a systems programming language. That's a BS term that means that it allows (and often requires) you to interact with the computer at a lower level than a lot of scripting languages, for example. Some scripting languages are designed to make it possible to allow you to make things as easy as possible with as little prior knowledge as possible. Zig, however, is not interested in being as easy to use as possible, and it's not interested in hiding the complexity of modern computers from you. On the contrary, Zig is interested in allowing you to build the most performant, the most efficient, the most correct, and the most powerful software possible. And in order to do that, it assumes that you have more underlying knowledge than some other programming languages.

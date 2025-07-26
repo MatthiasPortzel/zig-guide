@@ -9,7 +9,7 @@ Using a subset of CommonMark Markdown, with the following restrictions:
 # Building
 Currently using Zine (since it supports static-generation of Zig syntax highlighting), but the content is designed to not use Zine-specific features, so building with a different markdown-based SSG should be theoretically possible.
 
-https://github.com/kristoff-it/zine/releases/tag/v0.10.3
+https://github.com/kristoff-it/zine/releases/tag/v0.11.1
 
 First, download Zine from the above link, and put the executable at `./bin/zine`.
 Then, build by running `./bin/zine`

@@ -4,7 +4,6 @@
 .author = "",
 .layout = "chapter.shtml"
 ---
-
 # Chapter D: An Ode to Short-Circuiting And
 
 ## Booleans
@@ -17,7 +16,7 @@ const will_i_survive: boolean = false;
 
 **YOU**: I wasn't concerned. In fact, wouldn't it be cool if Zig didn't have a boolean and just used u1?
 
-But the clarity! It's much semantically correct to have a u1 type for storing a single bit, 0 or 1, and a boolean type, for storing a true or false. Remember, type isn't just about internal representation, it's also about usage. A u1 can be added or subtracted or be acted on by bitwise operators, but it can't be used in conditionals. And a boolean can be used in a if statement, but it can't be added or subtracted or coerced to a number.
+But the clarity! It's much semantically correct to have a `u1` type for storing a single bit, 0 or 1, and a boolean type, for storing a true or false. Remember, type isn't just about internal representation, it's also about usage. A u1 can be added or subtracted or be acted on by bitwise operators, but it can't be used in conditionals. And a boolean can be used in a if statement, but it can't be added or subtracted or coerced to a number.
 
 I want to run through some examples of these rules, to make them clear. All of these usages are okay:
 ```zig
@@ -112,5 +111,7 @@ In this example, we first create an enum, and list out all of our possible state
 Notice the leading `.` before the enum value. This is called enum-literal syntax. It only works when Zig can determine the type of the enum from context, which it can here because it knows the type of the `currentColor` variable. This leading `.` will continue to show up in Zig in other places. It means a couple different things, but when it's in front of an identifier like this, it means, "look this up in context."
 
 ## Unions
+
+TODO
 
 [Next Chapter] (e-arrays)

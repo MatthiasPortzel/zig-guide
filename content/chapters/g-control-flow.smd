@@ -4,7 +4,6 @@
 .author = "",
 .layout = "chapter.shtml"
 ---
-
 # Control Flow
 
 Control flow refers to the order that statements are executed. If your program could only execute statements once from top to bottom it would be of very limited usefulness (for most conventional definitions of usefulness, which should not be the only criteria on which things are judged). The most powerful control flow structure in Zig is of course the function; however that will not be covered in this chapter. We will instead focus on the loops (for and while), ifs, and blocks. Blocks are not really control flow structures and so the chapter title is increasingly misleading.

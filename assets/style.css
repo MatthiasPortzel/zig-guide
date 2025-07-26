@@ -10,10 +10,10 @@ html {
 }
 
 body {
-    flex-grow: 1;
-    max-width: 40em;
+    /* Smallest of 40em (normal reading width), 95% of largest viewport size (make sure there's always at least 5% padding), and 100% of small viewport size (never bigger than the smallest possible screen size) */
+    width: min(40em, 95lvw, 100svw);
     border: var(--styled-border);
-    min-height: 100vh;
+    min-height: 100lvh;
 }
 
 nav {
