@@ -22,14 +22,14 @@ jobs:
       name: deploy
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Don't clone history
+
       - name: Setup Zine
         uses: kristoff-it/setup-zine@v1
         with:
           version: v0.11.1
-
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0  # Don't clone history
 
       - name: Release
         run: zine release
