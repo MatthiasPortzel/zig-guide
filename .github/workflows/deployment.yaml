@@ -25,15 +25,15 @@ jobs:
       - name: Setup Zine
         uses: kristoff-it/setup-zine@v1
         with:
-          version: v0.10.3
-      
+          version: v0.11.1
+
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Don't clone history
 
       - name: Release
         run: zine release
-        
+
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
         with:

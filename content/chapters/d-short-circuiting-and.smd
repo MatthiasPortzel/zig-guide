@@ -14,7 +14,7 @@ Now, it was very brief, but if it's possible you noticed that I called out `u1` 
 const will_i_survive: boolean = false;
 ```
 
-**YOU**: I wasn't concerned. In fact, wouldn't it be cool if Zig didn't have a boolean and just used u1?
+**YOU**: I wasn't concerned. In fact, wouldn't it be cool if Zig didn't have a boolean and just used `u1`?
 
 But the clarity! It's much semantically correct to have a `u1` type for storing a single bit, 0 or 1, and a boolean type, for storing a true or false. Remember, type isn't just about internal representation, it's also about usage. A u1 can be added or subtracted or be acted on by bitwise operators, but it can't be used in conditionals. And a boolean can be used in a if statement, but it can't be added or subtracted or coerced to a number.
 
