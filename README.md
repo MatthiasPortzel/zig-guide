@@ -14,6 +14,9 @@ https://github.com/kristoff-it/zine/releases/tag/v0.11.1
 First, download Zine from the above link, and put the executable at `./bin/zine`.
 Then, build by running `./bin/zine`
 
+# Deploying
+I'm currently deploying to CloudFlare pages. `.secret` and `.secrets` are the same file. Can deploy with `earthly +deploy` or `act -P ubuntu-latest=node:20-bullseye --container-architecture=linux/x86_64`.
+
 # Lucide
 
 Selected icons are from the Lucide icon pack (https://lucide.dev) and licensed under the ISC license.
