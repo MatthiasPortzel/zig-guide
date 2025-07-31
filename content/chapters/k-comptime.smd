@@ -1,0 +1,37 @@
+---
+.layout = "chapter.shtml",
+.title = "",
+.author = "",
+.date = @date("1970-01-01T00:00:00")
+---
+# Chapter K: The Comptime trap (Comptime)
+
+Blix: but you haven't actually explained `comptime` yet. Are you ever going to, or? `comptime` was the one Zig feature I was excited about.
+
+Indeed I haven't explained it yet, and I suppose I have to.
+
+Even though comptime is one of the most unique and most exciting and most discussed features of Zig, I left it till last. Why? Not to keep you waiting, but simply because I think it is one of the least important and least interesting and least awe-inspiring features of the language. When I think of the Zig features that make me smile with unconfined pleasure, I think of saturating subtraction. When I see `comptime` in a piece of Zig code, on the other hand, I grimace and brace myself for the affront to the natural order of things that is likely to follow.
+
+One of the goals and promises of Zig is that the same language that you're used to writing at runtime is also available at compile time. As you'll see shortly, this leads to the emergence of a number of very convenient and very natural structures, which do improve many programs.
+
+However if you understand how the comptime engine in Zig works, there are a number of limitations that become clear. You can imagine the core of the Zig compiler as a beast (called Sema) with two mouths. And this beast consumes an AST (abstract syntax tree) representing your Zig source code. (Picture a tree with each expression or literal or function call as a fruit hanging off of the tree.) For each construct (fruit) in the AST (tree) that the Zig compiler (the Sema beast) comes across, it must decide to process (eat) that construct (fruit) with one of its two mouths. One of the mouths is labeled "runtime." When a Zig expression is eaten by the runtime mouth, the Zig compiler will generate binary code for that expression (but will not execute it). But when an expression is eaten by the second mouth, the "comptime" mouth, that expression is interpreted by the Zig "compiler" and executed immediately. (I have to put scare quotes around "compiler" because in this part of its job, the Zig compiler is not a compiler at all. It is an interpreter.) The elephant in the room is that the Zig programming language is supposed to be compiled, low-level, systems programming language with an emphasis on execution speed. However none of those traits apply to comptime code. Comptime code is interpreted by the relatively slow comptime engine. Comptime code has more in common in some areas (e.g., its lack of performance, its infinite-sized integers) with other interpreted languages than it does with runtime Zig.
+
+This may be a digression; however, I believe a comparison to Lisp macros is fair here. Lisp's unique macros are the most powerful program design construct available in any language. They give the programmer the ability to introduce novel programming language constructs whole-cloth at runtime. While this is more powerful than Zig's comptime, it is analogous because Zig's comptime allows the programmer to execute arbitrary Turning complete logic very easily at compile time (in an interpreter in something that is ostensibly a systems programming language). Lisp programmers know that the power of Lisp macros introduces tremendous responsibility, and for the most part, use macros sparingly and only when they are certain that other tools would not be appropriate.
+
+*This is a blatant lie. Lisp programmers very frequently use macros to create abominations beyond the comprehension of other programmers without so much as a passing thought for whether their goals would be better achieved by just learning Ruby.
+
+However, Zig programmers very frequently use comptime for things that Zig as a systems programming language is inherently not well suited for. Since Zig's comptime is so different from Zig the systems programming language, a lot of the times situations that cause zig programmers to reach for comptime (as an interpreted language), those programs would be better suited readching for Ruby or another high-level scripting language.
+
+
+
+At a high level, `comptime` is pretty intuitive. Zig does a decent job making things comptime that need to be, and if you need something else `comptime`, you can add the `comptime` keyword. One of the goals of Zig is that code can run at comptime or runtime, so mostly you don't need to think about it.
+
+TODO: re-do this intro once more in the context of the rest of the chapter. Should I say you don't need to think about it? Do you need to know comptime is the responsibility of the caller? Do you need to know that comptime is compile-time known.
+
+But to understand what Zig is actually doing to determine what is and what isn't `comptime` requires some level of explanation.
+
+## Comptime-known
+
+Let's start with comptime known.
+
+[Next Chapter](derf-ruby)

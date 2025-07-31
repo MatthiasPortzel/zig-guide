@@ -22,7 +22,11 @@ No `var` or `let` or `const` or type or semicolon.
 
 **YOU**: Isn't this just Python?
 
-Ruby makes Python look like BASIC.
+Not even close. Ruby makes Python look like BASIC.
+
+Blix: Wasn't this a Zig guide?
+
+My plan all along was to trick people into learning Ruby. It's 2025 and Ruby's dropped 3 places on the StackOverflow developer survey, but the language has only gotten better. People just don't care about it anymore because it's not the shiny new thing. Look, Blix, you get royalties if people go back and read *The Poignant Guide*, let me finish.
 
 Ruby is object-oriented.
 
@@ -77,3 +81,5 @@ comptime assert(@TypeOf(door_state) == @Type(.enum_literal));
 Remember that Zig only allows enum literals at comptime. Ruby has no compile-time and so it has no such limitation. Ruby allows you to do anything you can imagine at runtime, like creating methods, as we did with attr_accessor above.
 
 Ruby isn’t a perfect language. (Brackets are objectively superior to `begin`…`end`, for example.) But it is a very beautiful and a very practical language, which is useful for replacing everything from shell scripts to web apps backends. Don’t get lost or distracted by Zig’s beauty and forget to appreciate the beauty in other programming languages.
+
+[Next Chapter](l-conclusion)

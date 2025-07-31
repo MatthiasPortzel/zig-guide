@@ -14,11 +14,11 @@
 
 [D: An Ode to Short Circuiting And (Booleans and Unions and Enums)](./d-short-circuiting-and)
 
-E: (Arrays)
+[E: (Arrays)](./e-arrays)
 
 [F: (Pointers and Slices)](./f-pointers-and-slices)
 
-G: (Control Flow)
+[G: (Control Flow)](./g-control-flow)
 
 [H: The F-word (Functions)](./h-functions)
 
@@ -26,6 +26,8 @@ G: (Control Flow)
 
 [J: (Result Location Semantics)](./j-rls)
 
-K: (Comptime)
+[K: (Comptime)](./k-comptime)
 
 [DERF: Just Learn Ruby](./derf-ruby)
+
+[L: Farewell (Conclusion)](./l-conclusion)

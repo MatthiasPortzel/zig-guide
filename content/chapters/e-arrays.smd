@@ -1,0 +1,33 @@
+---
+.layout = "chapter.shtml",
+.title = "",
+.author = "",
+.date = @date("1970-01-01T00:00:00")
+---
+
+Arrays are kind of a half-step into more complicated and more dynamic programming.
+
+An array is a list. There are a lots and lots of different types of arrays. The reason for that is that there is a type of array for every other type and for every length. That is, the type of an array itself has two pieces of information: the length of the array, and the type of the items (a sub-type, if you will).
+
+So for example, I could create an array with length 10 and sub-type `usize`. And what that would represent is a list of 10 `usize`s. We can instantiate that array with 10 numbers.
+
+
+Arrays are very useful because they allow you to store multiple pieces of data. However, arrays in Zig are limited by two major constraints. The first one is that type of all the elements in the array has to be the same. The second one is that the length of the array has to be known at comptime (compile-time). This follows from the a-fore-mentioned fact that the length of the array is part of the type, and the type of all variables is known at comptime.
+
+What can you do with an array?
+
+You can index into it. You can use square brackets (`[N]`, where N is an integer). Now, that index does not have to be comptime known. This is cool because you can create a bunch of values while writing your program and then choose which value to use later by indexing into the array at different positions. Like a contestant on Let's Make a Deal, you get a choice of which of the three doors you want to open (but the studio has to know the number of doors well in advance so they can build the set).
+
+# Slices
+(actually talked about in the next chapter)
+Unlike a lot of languages, arrays in Zig are copy-by-value. This is one of my favorite things about Zig: all types have copy semantics.
+
+
+
+# Confession
+
+I learned programming on a website called Khan Academy. Khan Academy's programming videos were good. They also had a custom code-execution environment (the live editor, they called it), for practicing. Nothing surprising there, they have exercises for practicing your math skills as well. However, bizarrely, Khan Academy also implemented social features for their computer science section. Likes, comments, a single feed of popular programs, regular contests. All the building blocks for unsupervised, home-schooled children to build a verifiable society (undernether the oauspiciouses of volenteer and outsourced moderators shadow-banning anyone who mentioned personal information). We thrived for years, learning from each other, playing fun games, attaching our self-worth the number of up-votes we got.
+
+There was just one problem: like half the kids on the website didn't freaking understand arrays.
+
+[Next Chapter](f-pointers-and-slices)

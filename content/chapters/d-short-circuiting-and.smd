@@ -112,6 +112,19 @@ Notice the leading `.` before the enum value. This is called enum-literal syntax
 
 ## Unions
 
-TODO
+Zig has two types of unions, tagged and untagged. I'm only going to be talking about tagged unions, because they're vastly more useful. A tagged union has two parts.
 
-[Next Chapter] (e-arrays)
+First, it has a tag. The tag is an enum which represents the possible states the union can be in. Like enums, you can define your own unions, and when you do, you define what states your union can possibly be in. And again, like an enum, a union can only be in one state at a time (the tag keeps track of what state this is).
+
+Unlike an enum, a union stores additional data. This data is the second part of a tagged union. The thing that makes union special is that they can change their shape. They can change what data they store depending on what state they're in. When you define a union type, you can define several different states, and a piece of data that you want the union to store when it's in each state. The pieces of data don't even have to be the same size!
+
+```zig
+// TODO: examples
+// declaring a union with a f64 and a usize
+// init as a float
+// read as a float
+// function that switches on the state and prints
+// change to an int (destroying/overwriting the float data)
+```
+
+[Next Chapter](e-arrays)

@@ -134,3 +134,5 @@ const b: usize = 0;
 There are many places like this, where there already is a Result Type or there could easily be one. In these cases, the use of `@as` is harmless, but it is bad style, and omitting it is preferred.
 
 If I had attempted to explain `@as` from scratch, it would have taken me very many words. However, with the context of what a Result Type is, there is nothing else to say.
+
+[Next Chapter](k-comptime)

@@ -74,7 +74,7 @@ const a: comptime_int = 10000000;
 const b: usize = a;
 ```
 
-There’s not thing special happening here, the coercion is safe so it just happens.
+There's not thing special happening here, the coercion is safe so it just happens.
 
 If you don't specify a type, comptime_int is the default. (Or, more accurately, the type of the variable is taken from the type of the value, and literal numeric values have a type of `comptime_int`.)
 

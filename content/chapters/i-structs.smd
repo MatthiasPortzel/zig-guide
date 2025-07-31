@@ -116,3 +116,5 @@ std.debug.log("{}", .{ your_power_supply.used_in_time_machine }); // true
 ```
 
 All time machines need a power supply with a power level of 1 (100%), 2,048 V (we can optionally use the _ instead of a comma in Zig code to make large numbers easier to read), and obviously the `used_in_time_machine` variable set to true.
+
+[Next Chapter](j-rls)
