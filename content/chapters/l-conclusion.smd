@@ -4,13 +4,21 @@
 .author = "",
 .layout = "chapter.shtml"
 ---
-# Chapter L: Farewell
+# Chapter L: Standing on the Shoulders of Giants
 
 Every story has to have an ending.
 
-Blix: Unless you're like _why and you just vanish before ever finishing the book.
+Blix: Unless you're like Why and you just vanish before ever finishing the book.
 
-Well then, consider this the one way in which I have surpassed Why. I can't match his rhetoric or his plot or his vivid imagination, but at least I can finish a guide to a programming language.
+Well then, this would be the one way in which I could surpass Why. I can't match his rhetoric or his plot or his vivid imagination, but at least I can finish a guide to a programming language.
+
+At some moments while writing this book I felt like a five year attempting to shoot a basketball, holding the ball between both my hands even though it's twice the size of my head. Pushing forward with arms but also my whole body, jumping off the ground, only for the ball to go half the distance of an adult's throw, before bouncing pathetically on the ground.
+
+Why the Lucky Stiff's artistry and creativity may never be matched.
+
+However, there is one huge, glaring, notable area where Why failed, and that is that his Poignant Guide to Ruby was never completed.
+
+Like that five-year-old, grabbing on to his father's leg in an attempt to trip him, I have grabbed on to the one weakness of Why's Poignant Guide to Ruby which is visible at my eye-level. I am going to attempt to tackle the giant by doing the one thing he was unable to do, and finish this book.
 
 Thank you for accompanying me on this journey. Thank you for letting me show you the truth of the beauty of Zig (and Ruby).
 
