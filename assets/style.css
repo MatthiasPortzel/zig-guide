@@ -3,6 +3,7 @@ html {
     flex-direction: row;
     justify-content: center;
     background: rgb(81, 67, 122);
+    background-image: url("./purple-bg.png");
 }
 
 :root {
