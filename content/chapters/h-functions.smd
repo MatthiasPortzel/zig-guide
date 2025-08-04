@@ -26,21 +26,21 @@ The function definition starts with the `fn` keyword, then the name of the funct
 
 After the name, a function in Zig has three parts. The argument list, the return type, and the function body.
 
-**Blix the cat**: You forgot to make the function name snake_case. It should be `please_listen`.
+**Trady Blix (cat)**: You forgot to make the function name snake_case. It should be `please_listen`.
 
 **YOU**: Is that the cat from *Why's Poignant Guide to Ruby*?
 
-Blix? No, he's a legally distinct character played by the same cat-actor (who is also called Blix). It was a whole legal kerfuffle—the ACLU and the ADL got involved. See, the cat appeared as himself in Why's *Guide* and I don't have the rights for that portrayal of him, but they couldn't stop me from hiring the fictional cat-actor to play my assistant. Of course, I'm really betting that Why isn't going to come out of retirement and dox himself in order to sue a cut-rate knock-off for copyright infringement.
+Blix? No, he's a legally distinct character played by the same cat-actor (who is also called Blix). It was a whole legal kerfuffle—the ACLU and the ADL got involved. See, the cat appeared as himself in Why's *Guide* and I don't have the rights for that portrayal of him, but they couldn't stop me from hiring the fictional cat-actor to play my assistant. (Of course, I'm really betting that Why isn't going to come out of retirement and dox himself in order to sue a cut-rate knock-off for copyright infringement.)
 
 **YOU**: I see. Are you going to fix the capitalization in the function name?
 
 No, the function name is right. Blix worked on one Ruby book and now thinks he can correct me. I've never even seen him write Ruby.
 
-**Blix**: I write Ruby all the time.
+**Blix**: I write the best Ruby.
 
 Really? How can you use a keyboard with your paws?
 
-**Blix**: If I had known I was going to be publicly interrogated on my Ruby skills I wouldn't have taken this job.
+**Blix**: Your mom types out my amazing Ruby programs for me. Hehehe
 
 Anyways, to Blix's point, function names in Zig are camelCased. This has one major advantage—you can tell whether a symbol is a function or a variable / field reference just by looking at the casing. This one of the more controversial aspects of Zig's style guide and some projects defy convention and don't follow it (snake_casing their function names). However, after once you get used to it, I find it to be very comfortable. Languages like C and Python, which have a programming style which involves writing lots of variables, use snake_case. Whereas JavaScript (which is a very functional language) and Java (where methods are very important) use camelCase. So it makes a weird sort of sense to me to write functions and methods in camelCase while using snake_case for variables and fields.
 
@@ -62,11 +62,11 @@ One of the hallmarks of function programming languages is functions as values (y
 
 Now, it would be easy to say that Zig does not have functions as values. And certainly, functions are not first-class values, in Zig, like they are in JavaScript or Lisp or any functional programming language that I'm aware of. However, the reason I hesitate to say that functions are not values is because Zig has in fact two different ways of working with functions as values.
 
-The first is what are known as comptime function bodies, and the second are function pointers. The first is an invention of Zig related to Zig's concept of comptime, as would be suggested by the name. The second is very similar to function pointers in C.
+The first is what are known as comptime function bodies, and the second is function pointers. The first is an invention of Zig related to Zig's concept of comptime, as would be suggested by the name. The second is very similar to function pointers in C.
 
 These patterns allow you to adapt most paradigms that rely on functions as values from functional programming languages into Zig without much trouble. For example, in JavaScript I might create an object where the keys of the object are strings (like they normally are in JavaScript) and the values are functions. Then I could look up the string in the object and run the corresponding function.
 
-Well, in Zig, this paradigm could be replicated with a HashMap of strings (or, more preferably, enums values) as the keys and function pointers as the values. As an aside, this normally isn't considered good form in Zig. Normally, you should find a way to organize your data that doesn't require these sorts of dynamic dispatches to functions. But it's possible, it's not a limitation of the language.
+Well, in Zig, this paradigm could be replicated with a HashMap of strings (or, more preferably, enums values) as the keys and function pointers as the values. (As an aside, this normally isn't considered good form in Zig. Normally, you should find a way to organize your data that doesn't require these sorts of dynamic dispatches to functions. But it's possible, it's not a limitation of the language.)
 
 ### A lack of closure
 
@@ -78,7 +78,7 @@ But there's a second issue with closures: Zig does not have dynamic stack alloca
 
 Now, there was a proposal for a Zig feature called Stack Capturing Macros, that was designed to allow you to implement many of the patterns that normally you would use closures for without requiring dynamic memory management. Similarly, there was a proposal to declare functions using assignment syntax, to pretend that functions were values (as a more powerful version of the existing conception of function bodies as comptime known values). The issue with these proposals was that Zig is not a functional language, and imitating those patterns is not a design goal of Zig.
 
-On the contrary, the function definition syntax is intentionally different in order to emphasize that functions exist in a much different way in the resulting assembly than, say, a global constant. (I do have a background in functional programming and not assembly, so this distinction is difficult for me to describe, but I have been reliably informed that it exists. (Of course, it's possible that Andrew Kelley, like a cult leader, is incorrect on this point and has merely brainwashed me into believing him about things that I don't understand, and that this book is merely a recruiting tool for the Cult of Zig.))
+On the contrary, the function definition syntax is intentionally different in order to emphasize that functions exist in a much different way in the resulting assembly than, say, a global constant. (I do have a background in functional programming and not assembly, so this distinction is difficult for me to describe, but I have been reliably informed that it exists. Something about functions existing in the symbol table. (Of course, it's possible that Andrew Kelley, like a cult leader, is incorrect on this point and has merely brainwashed me into believing him about things that I don't understand, and that this book is merely a recruiting tool for the Cult of Zig.))
 
 ### Function arguments are immutable
 
