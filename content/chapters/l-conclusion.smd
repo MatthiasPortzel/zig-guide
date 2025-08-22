@@ -30,8 +30,6 @@ I hope that you will continue your Zig learning experience, that you will not le
 
 [Ziglings (learn Zig by fixing broken programs)](https://codeberg.org/ziglings/exercises/)
 
-[Zig.guide (a far shorter Zig guide with a far shorter domain name)](https://zig.guide)
-
 I hope that if you encounter bugs or issues with the Zig language or Zig packages, you will investigate and understand them and share your findings. The first step to creating bug-free programs is creating a community that is intolerant of bugs. That means being willing to put in the work to improve programs, not just for yourself with local patches and workarounds, but for the whole community with bug reports and pull requests.
 
 In that spirit, if you see any typos, broken links, or examples that don't run, please let me know. As GitHub has started sprinkling ads for their AI "programmer" into their website, they are not my first choice of hosting provider. However, I have put this guide on GitHub specifically to make it easy to contribute fixes.
@@ -41,6 +39,12 @@ In that spirit, if you see any typos, broken links, or examples that don't run, 
 If you, like me, are not a fan of GitHub/Microsoft's dominance in the code-sharing space, you can email me a patch file. Git is inherently decentralized, and has a mechanism for serializing a plaintext transportable format. My email is on my home page:
 
 [MatthiasPortzel.com](https://MatthiasPortzel.com)
+
+You can clone the repository from this website:
+
+```sh
+git clone http://guidetozigforpeoplewhousedtoknowzigandthenhadtheirmemorywiped.com/zig-guide.git
+```
 
 You can generate a patch file (for manual emailing) by running:
 
